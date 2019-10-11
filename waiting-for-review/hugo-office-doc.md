@@ -1,18 +1,3 @@
----
-title: "hugo文档笔记"
-date: 2019-03-26
-draft: true
-isCJKLanguage: true
-keywords: "hugo"
-
-tags:
-  - hugo
-  - office docs
-
-menu: "hugo"
-
----
-
 # hugo
 
 - 口号是 构建站点最快的框架
@@ -49,15 +34,15 @@ menu: "hugo"
 - hugo安装之后,使用hugo version 查看版本
 - 创建一个新的站点(hello) hugo new site hello
 - 新站点创建之后,只要完成以下3步就可以跑起来了
-    - 下载一个主题 
-    - 为站点添加一些内容 content
-    - 启动hugo server, hugo server (记得用--bind 绑定指定网卡，不然就绑定127.0.0.1)
+  - 下载一个主题
+  - 为站点添加一些内容 content
+  - 启动hugo server, hugo server (记得用--bind 绑定指定网卡，不然就绑定127.0.0.1)
 - 添加主题
-    - git init
-    - git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
-    - 设置主题, echo 'theme = "ananke"' >> config.toml
+  - git init
+  - git submodule add <https://github.com/budparr/gohugo-theme-ananke.git> themes/ananke
+  - 设置主题, echo 'theme = "ananke"' >> config.toml
 - 添加站点内容
-    - 添加博客分类的文章 hugo new posts/hello.md
+  - 添加博客分类的文章 hugo new posts/hello.md
 - 启动hugo server: hugo server -D
 - 构建静态站点: hugo即可,会在public目录生成静态资源
 
@@ -80,17 +65,17 @@ hugo cli 是一个命令行.
 或是在config配置中指定 disableLiveReload = true
 - 部署正确的姿势: 删除public目录 ,执行hugo生成站点
 - hugo生成站点时不会主动删除public目录,所以在开发/生产环境,最好使用不同的输出目录
-    - 开发环境 hugo server -wDs ~/hello -d dev
-    - 生产环境 hugo -s ~/hello  默认输出到public
-    - 参数解析:
-        - w 表示实时加载
-        - D 表示草稿也发布  开发环境正好需要这个,而生产环境,没有特殊要求就不用了
-        - s 表示站点的目录
-        - d 表示输出目录    开发输出到dev 生产输出到public
+  - 开发环境 hugo server -wDs ~/hello -d dev
+  - 生产环境 hugo -s ~/hello  默认输出到public
+  - 参数解析:
+    - w 表示实时加载
+    - D 表示草稿也发布  开发环境正好需要这个,而生产环境,没有特殊要求就不用了
+    - s 表示站点的目录
+    - d 表示输出目录    开发输出到dev 生产输出到public
 
 ### 目录结构
 
-```
+```shell
 root@7bfe83861e15:~/hello# tree .
 .
 |-- archetypes
@@ -101,41 +86,41 @@ root@7bfe83861e15:~/hello# tree .
 |-- layouts
 |-- static
 `-- themes
-
 ```
+
 使用hugo new site创建一个新的站点,结构就如上面输出的一样
 
 - archetypes
-    - 每次用hugo new创建一个新的content文件时,文件中默认会包含date title,
-    - 这些数据就源自archetypes下的模板,也有地方称这些模板为 文章模板
-    - 说白了就是使用hugo new命令创建内容时，自动套用的模版
+  - 每次用hugo new创建一个新的content文件时,文件中默认会包含date title,
+  - 这些数据就源自archetypes下的模板,也有地方称这些模板为 文章模板
+  - 说白了就是使用hugo new命令创建内容时，自动套用的模版
 - assets
-    - hugo pipe要处理的文件,都存在assets
-    - 这个目录不是默认生产的
-    - 目录下的文件,只有带有 .Permalink .RelPermalink 属性的才会被发布到public目录
+  - hugo pipe要处理的文件,都存在assets
+  - 这个目录不是默认生产的
+  - 目录下的文件,只有带有 .Permalink .RelPermalink 属性的才会被发布到public目录
 - config
-    - hugo有大量指令,可以在json/yaml/toml文件中配置指令
-    - 指令可出现在启动参数/环境变量/配置文件中,写在配置文件中最省事
-    - 站点根目录下 config.toml文件配置指令是最佳实践
+  - hugo有大量指令,可以在json/yaml/toml文件中配置指令
+  - 指令可出现在启动参数/环境变量/配置文件中,写在配置文件中最省事
+  - 站点根目录下 config.toml文件配置指令是最佳实践
 - content
-    - 站点的内容都放在这个目录下
-    - 这个目录下会有多个子目录,每个子目录表示一个content分类
-    - 子目录, eg: content/blog, content/articles, content/tutorials
+  - 站点的内容都放在这个目录下
+  - 这个目录下会有多个子目录,每个子目录表示一个content分类
+  - 子目录, eg: content/blog, content/articles, content/tutorials
 - data
-    - hugo生产站点时的配置文件, yaml/json/toml格式
+  - hugo生产站点时的配置文件, yaml/json/toml格式
 - layout
-    - .html文件,这些文件表明了content如何渲染展示
-    - 这些模版包含：
-      - 列表页面
-      - 首页页面
-      - 分类页面
-      - 部分页面
-      - 单页页面
-      - 等
+  - .html文件,这些文件表明了content如何渲染展示
+  - 这些模版包含：
+    - 列表页面
+    - 首页页面
+    - 分类页面
+    - 部分页面
+    - 单页页面
+    - 等
 - static
-    - 静态content,eg:图片/css/js
+  - 静态content,eg:图片/css/js
 - themes
-    - 主题目录,也称为皮肤
+  - 主题目录,也称为皮肤
 
 ### 配置
 
@@ -162,73 +147,73 @@ hugo --environment staging 表示使用测试环境配置,会使用staging和\_d
 `一般开发环境使用hugo server部署,生产环境使用hugo即可`
 
 - hugo定义的变量(也是配置文件中可指定的参数),()里是默认值
-    - archetypeDir (“archetypes”) archetypes目录
-    - assetDir (“assets”) assets目录
-    - baseURL 站点目录名,一般是一个网址
-    - blackfriday 是一个markdown渲染引擎 go md库,名字还是黑色星期五
-    - buildDrafts (false) 构建站点时,默认不发布草稿
-    - buildExpired (false) 默认不发布过期文章
-    - buildFuture (false)  默认不发布未来文章(就是设置的发布日期还未到的文章)
-    - caches 更好的缓存设置
-    - canonifyURLs (false) 默认不将相对路径转换成绝对路径
-    - contentDir (“content”) content目录
-    - dataDir (“data”) data目录
-    - defaultContentLanguage (“en”) content的默认语言是英语
-    - defaultContentLanguageInSubdir (false) 默认不使用子目录表示语言
-    - disableAliases (false) 默认不禁止使用别名
-    - disableHugoGeneratorInject (false) 默认hugo会注入一些数据,仅限于首页html头中注入meta tag 
-    - disableKinds ([]) 禁用某个分类的所有页面
-    - disableLiveReload (false) 默认启用实时加载
-    - disablePathToLower (false) 默认将url转换成小写
-    - enableEmoji (false) 默认不启用表情符号
-    - enableGitInfo (false) 默认不启用git信息
-    - enableInlineShortcodes 是否启用shortcode,shortcode就是将重复的html封装了,减少重复代码
-    - enableMissingTranslationPlaceholders (false) 缺少转换时,默认显示空字符串或默认值,而不是占位符
-    - enableRobotsTXT (false) 默认不生成robots.txt
-    - frontmatter 用来配置元信息的,放在文件头
-    - footnoteAnchorPrefix (“”)  默认脚注锚点前缀是空
-    - footnoteReturnLinkContents (“”)  脚注返回链接上显示的文字默认是空
-    - googleAnalytics (“”) google 分析跟踪id
-    - hasCJKLanguage (false) 默认不使用cjk检测,cjk是中日韩语言自动检测
-    - imaging 图片处理配置
-    - languages 语言配置
-    - languageCode (“”) 配置站点的语言code
-    - languageName (“”) 配置站点的语言名
-    - disableLanguages 不启用某种语言
-    - layoutDir (“layouts”) layout目录
-    - log (false) 默认不启用日志
-    - logFile (“”) 设置日志路径
-    - menu 菜单设置
-    - metaDataFormat (“toml”) Front matter meta-data format 只有3种:toml/yaml/json
-    - newContentEditor (“”) 创建一个新content文章时,使用的编辑器
-    - noChmod (false) 默认同步文件的权限模式
-    - noTimes (false) 默认同步文件的修改时间
-    - paginate (10)   默认分页数量是10
-    - paginatePath (“page”) 分页时的分页元素是page
-    - permalinks 固定链接 
-    - pluralizeListTitles (true) 列表中启用多标题
-    - publishDir (“public”) 发布目录
-    - pygmentsCodeFencesGuessSyntax (false) 未指定语言的情况下,根据代码来猜测语法
-    - pygmentsStyle (“monokai”) 语法高亮的主题  也就是颜色主题
-    - pygmentsUseClasses (false) 默认不使用额外的css来补充颜色主题
-    - related hugo有默认的,可以微调
-    - relativeURLs (false) 默认不启用,相对路径是相对于content根目录说的,这个设置不影响绝对路径
-    - refLinksErrorLevel (“ERROR”) 默认ref/relref错误时的日志打印级别是error
-    - refLinksNotFoundURL ref/relref找不到指定page时,显示的占位符
-    - rssLimit (unlimited) 默认不限制rss订阅数量
-    - sectionPagesMenu (“”)  菜单相关
-    - sitemap 
-    - staticDir (“static”) static目录
-    - summaryLength (70) .Summary文件最大字数长度是70 也就是摘要
-    - taxonomies 用户自定义分类
-    - theme (“”) 使用哪个主题 也就是哪个皮肤
-    - themesDir (“themes”) 主题目录
-    - timeout (10000) 生产page content的超时时间 单位毫秒,也就是10s超时, 这是为了防止递归生产
-    - title (“”) 站点标题
-    - uglyURLs (false) 默认不启用 丑陋的url(带后缀,就是被认为是丑)
-    - verbose (false) 默认不启用详细输出
-    - verboseLog (false) 默认不启用详细日志记录
-    - watch (false) 默认不启用实时加载
+  - archetypeDir (“archetypes”) archetypes目录
+  - assetDir (“assets”) assets目录
+  - baseURL 站点目录名,一般是一个网址
+  - blackfriday 是一个markdown渲染引擎 go md库,名字还是黑色星期五
+  - buildDrafts (false) 构建站点时,默认不发布草稿
+  - buildExpired (false) 默认不发布过期文章
+  - buildFuture (false)  默认不发布未来文章(就是设置的发布日期还未到的文章)
+  - caches 更好的缓存设置
+  - canonifyURLs (false) 默认不将相对路径转换成绝对路径
+  - contentDir (“content”) content目录
+  - dataDir (“data”) data目录
+  - defaultContentLanguage (“en”) content的默认语言是英语
+  - defaultContentLanguageInSubdir (false) 默认不使用子目录表示语言
+  - disableAliases (false) 默认不禁止使用别名
+  - disableHugoGeneratorInject (false) 默认hugo会注入一些数据,仅限于首页html头中注入meta tag
+  - disableKinds ([]) 禁用某个分类的所有页面
+  - disableLiveReload (false) 默认启用实时加载
+  - disablePathToLower (false) 默认将url转换成小写
+  - enableEmoji (false) 默认不启用表情符号
+  - enableGitInfo (false) 默认不启用git信息
+  - enableInlineShortcodes 是否启用shortcode,shortcode就是将重复的html封装了,减少重复代码
+  - enableMissingTranslationPlaceholders (false) 缺少转换时,默认显示空字符串或默认值,而不是占位符
+  - enableRobotsTXT (false) 默认不生成robots.txt
+  - frontmatter 用来配置元信息的,放在文件头
+  - footnoteAnchorPrefix (“”)  默认脚注锚点前缀是空
+  - footnoteReturnLinkContents (“”)  脚注返回链接上显示的文字默认是空
+  - googleAnalytics (“”) google 分析跟踪id
+  - hasCJKLanguage (false) 默认不使用cjk检测,cjk是中日韩语言自动检测
+  - imaging 图片处理配置
+  - languages 语言配置
+  - languageCode (“”) 配置站点的语言code
+  - languageName (“”) 配置站点的语言名
+  - disableLanguages 不启用某种语言
+  - layoutDir (“layouts”) layout目录
+  - log (false) 默认不启用日志
+  - logFile (“”) 设置日志路径
+  - menu 菜单设置
+  - metaDataFormat (“toml”) Front matter meta-data format 只有3种:toml/yaml/json
+  - newContentEditor (“”) 创建一个新content文章时,使用的编辑器
+  - noChmod (false) 默认同步文件的权限模式
+  - noTimes (false) 默认同步文件的修改时间
+  - paginate (10)   默认分页数量是10
+  - paginatePath (“page”) 分页时的分页元素是page
+  - permalinks 固定链接
+  - pluralizeListTitles (true) 列表中启用多标题
+  - publishDir (“public”) 发布目录
+  - pygmentsCodeFencesGuessSyntax (false) 未指定语言的情况下,根据代码来猜测语法
+  - pygmentsStyle (“monokai”) 语法高亮的主题  也就是颜色主题
+  - pygmentsUseClasses (false) 默认不使用额外的css来补充颜色主题
+  - related hugo有默认的,可以微调
+  - relativeURLs (false) 默认不启用,相对路径是相对于content根目录说的,这个设置不影响绝对路径
+  - refLinksErrorLevel (“ERROR”) 默认ref/relref错误时的日志打印级别是error
+  - refLinksNotFoundURL ref/relref找不到指定page时,显示的占位符
+  - rssLimit (unlimited) 默认不限制rss订阅数量
+  - sectionPagesMenu (“”)  菜单相关
+  - sitemap
+  - staticDir (“static”) static目录
+  - summaryLength (70) .Summary文件最大字数长度是70 也就是摘要
+  - taxonomies 用户自定义分类
+  - theme (“”) 使用哪个主题 也就是哪个皮肤
+  - themesDir (“themes”) 主题目录
+  - timeout (10000) 生产page content的超时时间 单位毫秒,也就是10s超时, 这是为了防止递归生产
+  - title (“”) 站点标题
+  - uglyURLs (false) 默认不启用 丑陋的url(带后缀,就是被认为是丑)
+  - verbose (false) 默认不启用详细输出
+  - verboseLog (false) 默认不启用详细日志记录
+  - watch (false) 默认不启用实时加载
 
 命令行查看配置: hugo config | grep watch
 
@@ -275,27 +260,27 @@ frontmatter
 : 元信息,一般在文件开头,用3个短横线开头和结尾,中间的就是元信息
 
 - 配置日期
-    - 就是配置在page content中如何访问date
-    - 方法就是在config.toml中添加frontmatter节 (toml和ini文件的节 键 值 类似)
-    - 配置中,日期可能有多个候选者,也可以自己加日期候选,每次使用日期都会选用第一个可以匹配上的
-    - 日期有很多:当前日期 发布日期 最后修改日期 过期日期等
-    - 候选者不带冒号前缀的,就是普通候选者,一般都是hugo内部定义的一些日期别名
-    - 带冒号的候选,更多的是一种特殊的日期处理,这些候选都不是从frontmatter(content的元信息)中取到的
-    - :fileModTime 从content文件最后修改的时间戳中取日期
-    - :filename 从content文件名中取日期
-    - :git 从content在git上最后一次提交中取日期,这个需要开启 enableGitInfo=true配置
+  - 就是配置在page content中如何访问date
+  - 方法就是在config.toml中添加frontmatter节 (toml和ini文件的节 键 值 类似)
+  - 配置中,日期可能有多个候选者,也可以自己加日期候选,每次使用日期都会选用第一个可以匹配上的
+  - 日期有很多:当前日期 发布日期 最后修改日期 过期日期等
+  - 候选者不带冒号前缀的,就是普通候选者,一般都是hugo内部定义的一些日期别名
+  - 带冒号的候选,更多的是一种特殊的日期处理,这些候选都不是从frontmatter(content的元信息)中取到的
+  - :fileModTime 从content文件最后修改的时间戳中取日期
+  - :filename 从content文件名中取日期
+  - :git 从content在git上最后一次提交中取日期,这个需要开启 enableGitInfo=true配置
 - 配置 Blackfriday
-    - 前面也说了,这是hugo实现makrdown解析的引擎
-    - 如果要配置,也在blackfriday节
-    - blackfriday的选项蛮多, 暂时不列出.
-    - blackfriday的扩展有很多是有用的: 大部分支持和github的md写法类似,下面是需要提一下的:
-      - 前后都被两个波浪号包围的文字,显示将删除(是不显示还是显示删除线: ~~~123~)
-      - "[^1]" 脚注写法,就和论文的脚注类似,都是对某句话的进一步说明
-      - 和github的md写法类似, 块上面都需要插入一个空行
-      - 可以通过"{#id}"指定header id, 标题的header id是自动生成的
-      - 行位的反斜杠会自动转换成换行符
-      - 定义一个术语: 术语名单独一行,下一行用冒号开头,后跟术语定义
-      - 默认会删除新行,并加入一行. 可避免过多的空白行
+  - 前面也说了,这是hugo实现makrdown解析的引擎
+  - 如果要配置,也在blackfriday节
+  - blackfriday的选项蛮多, 暂时不列出.
+  - blackfriday的扩展有很多是有用的: 大部分支持和github的md写法类似,下面是需要提一下的:
+    - 前后都被两个波浪号包围的文字,显示将删除(是不显示还是显示删除线: ~~~123~)
+    - "[^1]" 脚注写法,就和论文的脚注类似,都是对某句话的进一步说明
+    - 和github的md写法类似, 块上面都需要插入一个空行
+    - 可以通过"{#id}"指定header id, 标题的header id是自动生成的
+    - 行位的反斜杠会自动转换成换行符
+    - 定义一个术语: 术语名单独一行,下一行用冒号开头,后跟术语定义
+    - 默认会删除新行,并加入一行. 可避免过多的空白行
 
 ### hugo 输出其他格式
 
@@ -309,7 +294,8 @@ cacheDir可配置缓存目录,cache节还可以具体配置缓存细节
 
 - 将重复的提取出来,减少重复工作,提出来的就是主题
 - hugo没有默认主题,需要通过命令行下载主题
-- 下载全部主题 git clone --depth 1 --recursive https://github.com/gohugoio/hugoThemes.git themes
+- 下载全部主题,
+git clone --depth 1 --recursive <https://github.com/gohugoio/hugoThemes.git> themes
 - 使用主题,可通过配置;可通过启动参数 -t,指定主题名即可
 - 可以配置多个主题,组合起来使用,也可以嵌套,也可以自定义主题
 
@@ -333,13 +319,13 @@ content organization:
 下面看看组织结构和站点渲染映射关系:
 
 - \_index.md
-    - hugo中的一个特殊文件,可以添加front matter和content到list模板
-    - 这些list模板可以是 section模板/Taxonomy模板/Taxonomy术语模板/首页模板
-    - permalink = baseurl + section(url)
-    - 对于\_index.md,最后在站点渲染时,转换成index.html
+  - hugo中的一个特殊文件,可以添加front matter和content到list模板
+  - 这些list模板可以是 section模板/Taxonomy模板/Taxonomy术语模板/首页模板
+  - permalink = baseurl + section(url)
+  - 对于\_index.md,最后在站点渲染时,转换成index.html
 - section中的单个page
-    - 单页模板会将page渲染成站点的页
-    - 链接是 section(url) + slug(一般取至md文件的文件名)
+  - 单页模板会将page渲染成站点的页
+  - 链接是 section(url) + slug(一般取至md文件的文件名)
 
 组织结构对应站点渲染过程,涉及的路径术语:
 
@@ -375,8 +361,7 @@ page捆绑分两类:
 - leaf bundle    叶子 没有子节点了
 - branch bundle  枝干 一般是首页/section/taxonomy术语/taxonomy列表
 
-
-比较 | leaf | branch 
+比较 | leaf | branch
 -----|------|-----
 用法 | 单页内容和附件的集合 | section页的附件集合
 索引文件名| index.md | \_index.md
@@ -411,7 +396,7 @@ branch bundle 枝干导航节点:
 
 - .md是最主要的一个, 其次其他的也会支持,eg: .maark .org .html .htm
 - hugo中使用黑色星期五来做md文件的解析引擎,目前版本,tab要是4个空格,如果是2个会出错
-- blackfriday的选项可参考https://gohugo.io/content-management/formats/#blackfriday-extensions
+- blackfriday的选项可参考<https://gohugo.io/content-management/formats/#blackfriday-extensions>
 
 blackfriday支持的md相对于标准来说,做了如下扩展:
 
@@ -449,65 +434,65 @@ front matter可以添加在:
 - 在yaml格式的配置中,用---作为识别代码
 - 在toml格式的配置中,用+++作为识别代码
 - 在json格式的配置中,用{新行}作为识别代码
- 
+
 front matter 中的变量:
 
 - 预定义变量,在使用时用 .变量名,还分大小写
-    - aliases,发布时,生产的别名,一个或多个,一般用于有修改content文件在渲染时改名的场景
-    - audio,一组和page相关的,音频文件路径,被opengraph内部模板使用
-    - date,page的日期,一般从front matter的date中获取,可配置
-    - description, content的描述
-    - draft, 是否发布草稿.当然,如果启动参数指明不发布草稿,那这个设置就不起作用
-    - expiryDate,过期时间,过期后hugo就不发布这个content,也受启动参数影响
-    - headless, 是否是特殊的leaf bundle
-    - images, 一组和page相关的,图片文件路径,被内部模板使用
-    - isCJKLanguage, 是否是中日韩语言, 会导致字数统计有差异
-    - keywords, 关键字
-    - layout, 布局选择器,和k8s的选择类似,只要选择器的名字一样,就使用指定的布局来套用当前content
-    - lastmod, content最后修改时间
-    - linkTitle, 创建一个链接,指向content,
-    - markup, 实现性功能, 指明当前content的格式. 一般不使用,因为用的主要是md
-    - outputs, 输出格式,种类多多
-    - publishDate, 发布日期,受启动参数影响
-    - resources, 用于配置页面导航资源
-    - series, 一系列page属于哪个系列,可以理解为分类,被opengraph内部模板使用
-    - slug, 输出url的尾部, 看是否需要修改url中的文件名部分
-    - summary, 文本, 也就是摘要
-    - title, content的标题
-    - type, content的类型,自动从目录(section)中继承而来,不能被front matter指定,但可以使用
-    - url, 完整的url路径,当然是渲染之后,可访问的
-    - videos,一组和page相关的,视频文件路径,被opengraph内部模板使用
-    - weight, 加载显示的优先级, 值越小,优先级越高,越优先显示
-    - < taxonomies>, 分类, 可有多个,hugo内置了一些,用户也可以自定义分类,两者工作原理不一样
+  - aliases,发布时,生产的别名,一个或多个,一般用于有修改content文件在渲染时改名的场景
+  - audio,一组和page相关的,音频文件路径,被opengraph内部模板使用
+  - date,page的日期,一般从front matter的date中获取,可配置
+  - description, content的描述
+  - draft, 是否发布草稿.当然,如果启动参数指明不发布草稿,那这个设置就不起作用
+  - expiryDate,过期时间,过期后hugo就不发布这个content,也受启动参数影响
+  - headless, 是否是特殊的leaf bundle
+  - images, 一组和page相关的,图片文件路径,被内部模板使用
+  - isCJKLanguage, 是否是中日韩语言, 会导致字数统计有差异
+  - keywords, 关键字
+  - layout, 布局选择器,和k8s的选择类似,只要选择器的名字一样,就使用指定的布局来套用当前content
+  - lastmod, content最后修改时间
+  - linkTitle, 创建一个链接,指向content,
+  - markup, 实现性功能, 指明当前content的格式. 一般不使用,因为用的主要是md
+  - outputs, 输出格式,种类多多
+  - publishDate, 发布日期,受启动参数影响
+  - resources, 用于配置页面导航资源
+  - series, 一系列page属于哪个系列,可以理解为分类,被opengraph内部模板使用
+  - slug, 输出url的尾部, 看是否需要修改url中的文件名部分
+  - summary, 文本, 也就是摘要
+  - title, content的标题
+  - type, content的类型,自动从目录(section)中继承而来,不能被front matter指定,但可以使用
+  - url, 完整的url路径,当然是渲染之后,可访问的
+  - videos,一组和page相关的,视频文件路径,被opengraph内部模板使用
+  - weight, 加载显示的优先级, 值越小,优先级越高,越优先显示
+  - < taxonomies>, 分类, 可有多个,hugo内置了一些,用户也可以自定义分类,两者工作原理不一样
 - 用户自定义变量,在使用时用 .Params.变量名
 
-front matter中的weight变量,可用于content的排序,分类中也能用到 
+front matter中的weight变量,可用于content的排序,分类中也能用到
 
 ### page 资源
 
 page资源,一般包括图片,其他page,文档,还有和page相关的url和元素数据等
 
 - 属性
-    - ResourceType 资源主类型 eg:图片, 图片下还有png 和jpg等
-    - Name 资源名,默认就是文件名,可在front matter中设置
-    - Title 值和资源名一样,可在front matter中设置
-    - Permalink 绝对url, page类型的资源是没有这个值的, page的固定链接是拼出来的
-    - RelPermalink 相对url,
-    - Content 资源内容,大部分资源都是将内容放到字符串里返回
-    - MediaType 资源的mime类型,eg: image/jpg
-    - MediaType.MainType 资源的主mime类型
-    - MediaType.SubType 子mime类型
-    - MediaType.Suffixes mime类型中的后缀
+  - ResourceType 资源主类型 eg:图片, 图片下还有png 和jpg等
+  - Name 资源名,默认就是文件名,可在front matter中设置
+  - Title 值和资源名一样,可在front matter中设置
+  - Permalink 绝对url, page类型的资源是没有这个值的, page的固定链接是拼出来的
+  - RelPermalink 相对url,
+  - Content 资源内容,大部分资源都是将内容放到字符串里返回
+  - MediaType 资源的mime类型,eg: image/jpg
+  - MediaType.MainType 资源的主mime类型
+  - MediaType.SubType 子mime类型
+  - MediaType.Suffixes mime类型中的后缀
 - 方法
-    - ByType 根据类型获取page资源
-    - Match  根据资源名匹配结果来获取page资源,匹配区分大小写
-    - GetMatch 只返回第一个匹配的page资源
+  - ByType 根据类型获取page资源
+  - Match  根据资源名匹配结果来获取page资源,匹配区分大小写
+  - GetMatch 只返回第一个匹配的page资源
 - 元数据
-    - page资源的元数据由page的front matter和叫resources的参数管理
-    - name 可指定Name
-    - title 可指定Title
-    - params 可自定义k-v对
-    - 占位符 :counter 可用在name/title中, 设置之后,Name和Title才会各自取各自的值
+  - page资源的元数据由page的front matter和叫resources的参数管理
+  - name 可指定Name
+  - title 可指定Title
+  - params 可自定义k-v对
+  - 占位符 :counter 可用在name/title中, 设置之后,Name和Title才会各自取各自的值
 
 ### image处理
 
@@ -516,11 +501,10 @@ image page资源可以 resized and cropped, 重置大小/裁剪
 一个站点会有多个页面捆绑，
 一个页面捆绑中，获取所有image：
 
-
-```
+```text
 {{ with .Resources.ByType "image" }}
 {{ end }}
-``` 
+```
 
 下面的image处理方法,并不适用于/static目录下的图片:
 
@@ -528,7 +512,7 @@ image page资源可以 resized and cropped, 重置大小/裁剪
 - Fit 缩放到指定宽高
 - Fill 等比缩放到指定宽高,可能会有裁剪
 
-```
+```text
 {{ $image := $resource.Resize "600x" }}
 {{ $image := $resource.Resize "x400" }}
 {{ $image := $resource.Resize "600x400" }}
@@ -555,18 +539,16 @@ config中配置image处理,在imaging节.就算不指定,hugo也有默认处理
 
 - 在hugo中,md是偏爱的,特别适合content格式,不足之处就衍生出了shortcode
 - md + shortcode + template 保证3个方面都可以独立发展,在生产站点时由hugo来保证衔接
-- 在content中,调用shortcode的方式是 
+- 在content中,调用shortcode的方式是
 
-
-```
+```text
 { {% shortcodename params %}}
 ```
-
 
 - 参数由空格分隔,参数包含空格,就需要用引号包裹
 - 其中的%和<>是一样的,都是终结符,和mysql存储过程的结束符是一个意思
 
-```
+```text
 html123
 content
 html456
@@ -576,18 +558,18 @@ content中的写法应该是 { {% abc %}} md内容 { {% /abc %}}
 
 为了照顾到html, 包含shortcode的写法也是成对的,
 当然,如果shortcode里的html是完整的,那就不用成对出现了.
-``` 
+```
 
 shortcode 可以嵌套, 在子shortcode中获取父shortcode,可用.Parent
 
 hugo提供了一些内置的shortcode:
 
 - figure, 处理image
-    - src, 要显示imge的url
-    - link, 要显示image的超链接,目的地址
-    - target, 可选,如果link指定了,这个设置就有意义
-    - rel, 可选,link指定了才有意义
-    - 等等
+  - src, 要显示imge的url
+  - link, 要显示image的超链接,目的地址
+  - target, 可选,如果link指定了,这个设置就有意义
+  - rel, 可选,link指定了才有意义
+  - 等等
 - gist, 适用于blog,适用于在content中引用代码片段
 - highlight, 代码高亮
 - param, 在front matter中查找当前page参数的值
@@ -605,23 +587,23 @@ hugo提供了一些内置的shortcode:
 要在一个页面中显示同系列的页面，需要类似如下的模版，
 在layout/partials/related.html
 
-```
+```text
 // 页面集合中相关方法是.RegularPages
 // $related := .Site.RegularPages.Related . 返回和当前页相关的集合
 {{ $related := .Site.RegularPages.Related . | first 5 }}  
 {{ with $related }}
 <h3>See Also</h3>
 <ul>
-	{{ range . }}
-	<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-	{{ end }}
+  {{ range . }}
+  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
 </ul>
 {{ end }}
 ```
 
-    .Site.RegularPages 说的是取常规页面
-    hugo中分内容页面和常规页面，分别对应叶子捆绑和枝干捆绑
-    叶子是内容，没有子节点，枝干一般是首页/导航/分类等页面
+.Site.RegularPages 说的是取常规页面  
+hugo中分内容页面和常规页面，分别对应叶子捆绑和枝干捆绑  
+叶子是内容，没有子节点，枝干一般是首页/导航/分类等页面  
 
 常规页面(.Site.RegularPages)也有一些方法：
 
@@ -672,7 +654,6 @@ related:
 
 `如果非常需要，不然不建议使用系列页面这个功能，因为会影响性能`
 
-
 ### content sections
 
 section
@@ -720,7 +701,7 @@ hugo中的约定:
 - 在content下创建一个子目录, eg: content/events/
 - 在events下的content文件的front matter如下配置即可
 
-```
+```text
 type = "event"
 layout = "birthday"
 ```
@@ -796,11 +777,10 @@ taxonomies:
 
 - 在想要分割摘要的地方使用
 
-```
+```text
     < !--more-->
     不要空格，全小写
 ```
-
 
 元数据指定摘要
 
@@ -898,7 +878,7 @@ hugo模版的基本语法：
 - 模版就是一些html文件，附加了一些变量和函数
 - 这些变量和函数都是通过 { {  } } 来访问
 
-``` 
+```text
 # 访问一个预定义的变量
 # 预定义变量可能是同一作用域已存在的hugo变量，也可以是自定义变量
 
@@ -982,7 +962,8 @@ hugo模版的基本语法：
     {{ .Summary }}
 {{ end }}
 
-{{ if (and (or (isset .Params "title") (isset .Params "caption")) (isset .Params "attr")) }}
+{{ if (and (or (isset .Params "title") (isset .Params "caption"))
+(isset .Params "attr")) }}
 
 # pipes 管道
 # go模版的一个强有力工具，类似linux的管道
@@ -1034,7 +1015,7 @@ hugo模版的基本语法：
 
 # hugo模版中支持了两种注释
 # go模版注释和html注释
-Bonsoir, {{/* {{ add 0 + 2 }} */}}Eliott.
+Bonsoir, {{/\* {{ add 0 + 2 }} \*/}}Eliott.
 
 {{ printf "<!-- Our website is named: %s -->" .Site.Title | safeHTML }}
 
@@ -1097,4 +1078,6 @@ params:
 - rss方式：直接包含所有内容页面
 - 3种方式可任意嵌套,组合
 
+## TODO
 
+补全官方文档
