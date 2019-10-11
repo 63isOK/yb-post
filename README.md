@@ -10,9 +10,13 @@
 - waiting-for-review: 等待review的post
 - reviewed：已reviewed的post
 
-## 博客
+## reviewed
 
-- hugo, 静态站点生成器 | [官方文档](/reviewed/hugo-office-doc.md)
+- hugo, 静态站点生成器 | [官方文档]
+
+## waiting for review
+
+- hugo, 静态站点生成器 | [官方文档](/waiting-for-review/hugo-office-doc.md)
 
 ## TODO
 
