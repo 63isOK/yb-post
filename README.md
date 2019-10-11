@@ -1,6 +1,6 @@
 # YB's BLOG
 
-![GitHub Actions status | markdownlint](https://github.com/fight100year/yb-post/workflows/markdownlint-lint/badge.svg)
+![markdownlint](https://github.com/fight100year/yb-post/workflows/markdownlint-lint/badge.svg)
 
 仓库说明 : 这个仓库主要用于将以前零散的文章集合在一处管理
 
