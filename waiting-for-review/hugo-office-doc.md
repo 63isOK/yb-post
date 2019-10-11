@@ -126,7 +126,7 @@ root@7bfe83861e15:~/hello# tree .
 
 - 指定配置文件
   - 通过启动命令指定
-  - --config string      config file (default is path/config.yaml|json|toml)
+  - --config string      config file (default is path/config[.yaml/.json/.toml])
   - 可同时指定多个配置文件,用逗号分隔
   - 默认使用根目录下的config文件
 - 配置目录
@@ -215,7 +215,11 @@ hugo --environment staging 表示使用测试环境配置,会使用staging和\_d
   - verboseLog (false) 默认不启用详细日志记录
   - watch (false) 默认不启用实时加载
 
-命令行查看配置: hugo config | grep watch
+命令行查看配置: 
+
+```shell
+hugo config | grep watch
+```
 
 ## hugo的模块
 
@@ -501,10 +505,8 @@ image page资源可以 resized and cropped, 重置大小/裁剪
 一个站点会有多个页面捆绑，
 一个页面捆绑中，获取所有image：
 
-```text
-{{ with .Resources.ByType "image" }}
-{{ end }}
-```
+> {{ with .Resources.ByType "image" }}
+> {{ end }}
 
 下面的image处理方法,并不适用于/static目录下的图片:
 
