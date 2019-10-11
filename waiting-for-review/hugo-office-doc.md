@@ -542,7 +542,7 @@ config中配置image处理,在imaging节.就算不指定,hugo也有默认处理
 - 在content中,调用shortcode的方式是
 
 ```text
-{ {% shortcodename params %}}
+{{ % shortcodename params %}}
 ```
 
 - 参数由空格分隔,参数包含空格,就需要用引号包裹
