@@ -554,7 +554,7 @@ content
 html456
 
 当html123和html456被抽象成shortcode abc之后,
-content中的写法应该是 { {% abc %}} md内容 { {% /abc %}}
+content中的写法应该是 {{ % abc %}} md内容 { { % /abc %}}
 
 为了照顾到html, 包含shortcode的写法也是成对的,
 当然,如果shortcode里的html是完整的,那就不用成对出现了.
