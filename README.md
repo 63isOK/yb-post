@@ -1,6 +1,5 @@
 # YB's BLOG
 
-![GitHub Actions status | md-lint](https://github.com/fight100year/yb-post/workflows/md-lint/badge.svg)
 ![GitHub Actions status | markdownlint](https://github.com/fight100year/yb-post/workflows/markdownlint-lint/badge.svg)
 
 仓库说明
