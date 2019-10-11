@@ -1,8 +1,0 @@
-on: [push,pull_request]
-name: md-lint
-jobs:
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: ocular-d/md-linkcheck-action@1.0.1
