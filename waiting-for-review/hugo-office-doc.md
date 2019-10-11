@@ -505,8 +505,8 @@ image page资源可以 resized and cropped, 重置大小/裁剪
 一个站点会有多个页面捆绑，
 一个页面捆绑中，获取所有image：
 
-> {{ with .Resources.ByType "image" }}
-> {{ end }}
+    {{ with .Resources.ByType "image" }}
+    {{ end }}
 
 下面的image处理方法,并不适用于/static目录下的图片:
 
