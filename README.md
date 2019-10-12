@@ -18,6 +18,9 @@
 - kurento, 一个开源的sfu 项目，主要承载的是webrtc流
   - [二次开发需要了解的faq](/waiting-for-review/kurento-faq.md)
   - ppt等演讲资料(包括技术选型的一个分析，源码分析)
+  - openvidu(kurento的姐妹项目)的
+[入门教程](/waiting-for-review/kurento-openvidu-office-doc-tutorials.md)、
+[demo](/waiting-for-review/kurento-openvidu-office-doc-demo.md)
 
 ## TODO
 
