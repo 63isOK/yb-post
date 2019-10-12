@@ -11,11 +11,10 @@
 
 ## reviewed
 
-- hugo, 静态站点生成器 | 官方文档
+- hugo, 静态站点生成器 | [官方文档](/reviewed/hugo-office-doc.md)
 
 ## waiting for review
 
-- hugo, 静态站点生成器 | [官方文档](/waiting-for-review/hugo-office-doc.md)
 
 ## TODO
 
