@@ -15,6 +15,8 @@
 
 ## waiting for review
 
+- kurento, 一个开源的sfu 项目，主要承载的是webrtc流
+  - [二次开发需要了解的faq](/waiting-for-review/kurento-faq.md)
 
 ## TODO
 
