@@ -126,7 +126,7 @@ root@7bfe83861e15:~/hello# tree .
 
 - 指定配置文件
   - 通过启动命令指定
-  - --config string      config file (default is path/config.yaml|json|toml)
+  - --config string      config file (default is path/config[.yaml/.json/.toml])
   - 可同时指定多个配置文件,用逗号分隔
   - 默认使用根目录下的config文件
 - 配置目录
@@ -215,7 +215,11 @@ hugo --environment staging 表示使用测试环境配置,会使用staging和\_d
   - verboseLog (false) 默认不启用详细日志记录
   - watch (false) 默认不启用实时加载
 
-命令行查看配置: hugo config | grep watch
+命令行查看配置: 
+
+```shell
+hugo config | grep watch
+```
 
 ## hugo的模块
 
@@ -554,7 +558,7 @@ content
 html456
 
 当html123和html456被抽象成shortcode abc之后,
-content中的写法应该是 { {% abc %}} md内容 { {% /abc %}}
+content中的写法应该是 {{ % abc %}} md内容 { { % /abc %}}
 
 为了照顾到html, 包含shortcode的写法也是成对的,
 当然,如果shortcode里的html是完整的,那就不用成对出现了.
