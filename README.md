@@ -26,8 +26,6 @@
 
 ## waiting for review
 
-- oh my zsh, 已配置好的zsh配置，[学习笔记](/waiting-for-review/oh-my-zsh.md)
-
 ## TODO
 
 - hugo, 官方文档未补全
