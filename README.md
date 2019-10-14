@@ -18,10 +18,11 @@
   - openvidu(kurento的姐妹项目)的
 [入门教程](/reviewed/kurento-openvidu-office-doc-tutorials.md)、
 [demo](/reviewed/kurento-openvidu-office-doc-demo.md)
-- [redis学习笔记](/waiting-for-review/redis-office-doc.md)
+- [redis学习笔记](/reviewed/redis-office-doc.md)
 - c++相关资料
-  - [cpp基础](/waiting-for-review/cpp-basic.md)
-  - [cpp自定义类型](/waiting-for-review/cpp-type.md)
+  - [cpp基础](/reviewed/cpp-basic.md)
+  - [cpp自定义类型](/reviewed/cpp-type.md)
+- i3wm,一个平铺窗口管理器，[学习笔记](/reviewed/i3wm-office-doc.md)
 
 ## waiting for review
 
