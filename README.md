@@ -25,7 +25,7 @@
 
 ## waiting for review
 
-- i3wm,一个平铺窗口管理器，[学习笔记](/waiting-for-review/redis-office-doc.md)
+- i3wm,一个平铺窗口管理器，[学习笔记](/waiting-for-review/i3wm-office-doc.md)
 
 ## TODO
 
