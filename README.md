@@ -29,6 +29,14 @@
 
 ## waiting for review
 
+- grpc系列:
+  - [grpc的介绍](/waiting-for-review/grpc-introduce.md)
+  - [设计原则](/waiting-for-review/grpc-post.md)
+  - [教程](/waiting-for-review/grpc-tutorial.md)
+  - [概念](/waiting-for-review/grpc-concepts.md)
+  - [异步调用](/waiting-for-review/grpc-async.md)
+  - [faq](/waiting-for-review/grpc-faq.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
