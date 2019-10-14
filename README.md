@@ -27,6 +27,8 @@
 
 ## waiting for review
 
+- spf13 vim配置，[学习笔记](/waiting-for-review/spf13-usage.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
