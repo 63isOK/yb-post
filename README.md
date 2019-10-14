@@ -12,15 +12,16 @@
 ## reviewed
 
 - hugo, 静态站点生成器 | [官方文档](/reviewed/hugo-office-doc.md)
+- kurento, 一个开源的sfu 项目，主要承载的是webrtc流
+  - [二次开发需要了解的faq](/reviewed/kurento-faq.md)
+  - ppt等演讲资料(包括技术选型的一个分析，源码分析)
+  - openvidu(kurento的姐妹项目)的
+[入门教程](/reviewed/kurento-openvidu-office-doc-tutorials.md)、
+[demo](/reviewed/kurento-openvidu-office-doc-demo.md)
 
 ## waiting for review
 
-- kurento, 一个开源的sfu 项目，主要承载的是webrtc流
-  - [二次开发需要了解的faq](/waiting-for-review/kurento-faq.md)
-  - ppt等演讲资料(包括技术选型的一个分析，源码分析)
-  - openvidu(kurento的姐妹项目)的
-[入门教程](/waiting-for-review/kurento-openvidu-office-doc-tutorials.md)、
-[demo](/waiting-for-review/kurento-openvidu-office-doc-demo.md)
+- [redis学习笔记](/waiting-for-review/redis-office-doc.md)
 
 ## TODO
 
