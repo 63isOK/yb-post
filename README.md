@@ -22,10 +22,9 @@
 - c++相关资料
   - [cpp基础](/reviewed/cpp-basic.md)
   - [cpp自定义类型](/reviewed/cpp-type.md)
+- i3wm,一个平铺窗口管理器，[学习笔记](/reviewed/i3wm-office-doc.md)
 
 ## waiting for review
-
-- i3wm,一个平铺窗口管理器，[学习笔记](/waiting-for-review/i3wm-office-doc.md)
 
 ## TODO
 
