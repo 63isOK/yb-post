@@ -33,14 +33,13 @@
   - [概念](/reviewed/grpc-concepts.md)
   - [异步调用](/reviewed/grpc-async.md)
   - [faq](/reviewed/grpc-faq.md)
-
-## waiting for review
-
 - golang 官方文档
   - [介绍](/reviewed/golang-introduce.md)
   - [基础教程](/reviewed/golang-tour.md)
   - [spec](/reviewed/golang-spec.md)
   - [go命令行参数](/reviewed/golang-cmd.md)
+
+## waiting for review
 
 ## TODO
 
