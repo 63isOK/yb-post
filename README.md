@@ -28,6 +28,8 @@
 
 ## waiting for review
 
+- docker环境安装(官方文档)，[学习笔记](/waiting-for-review/docker-install.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
