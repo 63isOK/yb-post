@@ -25,6 +25,7 @@
 - i3wm,一个平铺窗口管理器，[学习笔记](/reviewed/i3wm-office-doc.md)
 - oh my zsh, 已配置好的zsh配置，[学习笔记](/reviewed/oh-my-zsh.md)
 - spf13 vim配置，[学习笔记](/reviewed/spf13-usage.md)
+- docker环境安装,并配置了常用的vim和yb用户，[学习笔记](/reviewed/docker-install.md)
 
 ## waiting for review
 
