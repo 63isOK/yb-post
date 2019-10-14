@@ -23,6 +23,7 @@
   - [cpp基础](/reviewed/cpp-basic.md)
   - [cpp自定义类型](/reviewed/cpp-type.md)
 - i3wm,一个平铺窗口管理器，[学习笔记](/reviewed/i3wm-office-doc.md)
+- oh my zsh, 已配置好的zsh配置，[学习笔记](/reviewed/oh-my-zsh.md)
 
 ## waiting for review
 
