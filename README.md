@@ -26,6 +26,13 @@
 - oh my zsh, 已配置好的zsh配置，[学习笔记](/reviewed/oh-my-zsh.md)
 - spf13 vim配置，[学习笔记](/reviewed/spf13-usage.md)
 - docker环境安装,并配置了常用的vim和yb用户，[学习笔记](/reviewed/docker-install.md)
+- grpc系列:
+  - [grpc的介绍](/reviewed/grpc-introduce.md)
+  - [设计原则](/reviewed/grpc-post.md)
+  - [教程](/reviewed/grpc-tutorial.md)
+  - [概念](/reviewed/grpc-concepts.md)
+  - [异步调用](/reviewed/grpc-async.md)
+  - [faq](/reviewed/grpc-faq.md)
 
 ## waiting for review
 
@@ -34,3 +41,4 @@
 - hugo, 官方文档未补全
 - redis, 官方文档学习时的详细笔记没有，后面可补全，正好redis也更新了新内容
 - cpp笔记，只有最前面两章，还少很多
+- grpc的文档还缺少一部分，后面需要基于实际的例子补全
