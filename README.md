@@ -19,14 +19,14 @@
 [入门教程](/reviewed/kurento-openvidu-office-doc-tutorials.md)、
 [demo](/reviewed/kurento-openvidu-office-doc-demo.md)
 - [redis学习笔记](/waiting-for-review/redis-office-doc.md)
-
-## waiting for review
-
 - c++相关资料
   - [cpp基础](/waiting-for-review/cpp-basic.md)
   - [cpp自定义类型](/waiting-for-review/cpp-type.md)
+
+## waiting for review
 
 ## TODO
 
 - hugo, 官方文档未补全
 - redis, 官方文档学习时的详细笔记没有，后面可补全，正好redis也更新了新内容
+- cpp笔记，只有最前面两章，还少很多

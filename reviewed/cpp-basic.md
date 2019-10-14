@@ -30,8 +30,6 @@
     函数类型包含了返回值 + 参数顺序、参数类型
     如果是成员函数，还得 + 类名
 
-## a
-
     int a(int b); // int(int);
     int b::a(int aaa); // int b::(int);
 
