@@ -36,6 +36,12 @@
 
 ## waiting for review
 
+- golang 官方文档
+  - [介绍](/waiting-for-review/golang-introduce.md)
+  - [基础教程](/waiting-for-review/golang-tour.md)
+  - [进一步了解概念](/waiting-for-review/golang-lang.md)
+  - [go命令行参数](/waiting-for-review/golang-cmd.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
