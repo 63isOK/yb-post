@@ -26,7 +26,7 @@
 
 ## waiting for review
 
-- oh my zsh, 已配置好的zsh配置，[学习笔记](/reviewed/oh-my-zsh.md)
+- oh my zsh, 已配置好的zsh配置，[学习笔记](/waiting-for-review/oh-my-zsh.md)
 
 ## TODO
 
