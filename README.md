@@ -37,10 +37,10 @@
 ## waiting for review
 
 - golang 官方文档
-  - [介绍](/waiting-for-review/golang-introduce.md)
-  - [基础教程](/waiting-for-review/golang-tour.md)
-  - [进一步了解概念](/waiting-for-review/golang-lang.md)
-  - [go命令行参数](/waiting-for-review/golang-cmd.md)
+  - [介绍](/reviewed/golang-introduce.md)
+  - [基础教程](/reviewed/golang-tour.md)
+  - [spec](/reviewed/golang-spec.md)
+  - [go命令行参数](/reviewed/golang-cmd.md)
 
 ## TODO
 
@@ -48,3 +48,4 @@
 - redis, 官方文档学习时的详细笔记没有，后面可补全，正好redis也更新了新内容
 - cpp笔记，只有最前面两章，还少很多
 - grpc的文档还缺少一部分，后面需要基于实际的例子补全
+- go spec还未记录完，下一步的重点就是spec
