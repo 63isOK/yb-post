@@ -8,7 +8,7 @@ sudo chsh -s $(which zsh)
 git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-echo 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)'
+echo 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)' # 到.zshrc
 
 # oh-my-zsh 也支持svn git go golang 等
 
