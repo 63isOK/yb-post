@@ -20,9 +20,9 @@
 
 - 下划线属于字母
 
-    letter        = unicode_letter | "_" .
-    decimal_digit = "0" … "9" .
-    octal_digit   = "0" … "7" .
+    letter        = unicode_letter | "_" .  
+    decimal_digit = "0" … "9" .  
+    octal_digit   = "0" … "7" .  
     hex_digit     = "0" … "9" | "A" … "F" | "a" … "f" .
 
 ebnf表示法,依次定义了字母/十进制数字/八进制/十六进制数字
