@@ -73,12 +73,14 @@
 
 - 可由不同类型的元素组成,一个元素叫field,每个field都有名字和类型
 
-    StructType    = "struct" "{" { FieldDecl ";" } "}" .
-    FieldDecl     = (IdentifierList Type | EmbeddedField) [ Tag ] .
-    EmbeddedField = [ "*" ] TypeName .
+ebnf:
+
+    StructType    = "struct" "{" { FieldDecl ";" } "}" .  
+    FieldDecl     = (IdentifierList Type | EmbeddedField) [ Tag ] .  
+    EmbeddedField = [ "*" ] TypeName .  
     Tag           = string_lit .
 
-    // An empty struct.
+    // An empty struct.  
     struct {}
 
     // A struct with 6 fields.

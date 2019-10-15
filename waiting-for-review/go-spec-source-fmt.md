@@ -18,7 +18,7 @@
 
 ## 字母和数值
 
-- 下划线属于字母
+下划线属于字母
 
     letter        = unicode_letter | "_" .  
     decimal_digit = "0" … "9" .  
