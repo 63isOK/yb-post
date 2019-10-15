@@ -34,12 +34,27 @@
   - [异步调用](/reviewed/grpc-async.md)
   - [faq](/reviewed/grpc-faq.md)
 - golang 官方文档
-  - [介绍](/reviewed/golang-introduce.md)
-  - [基础教程](/reviewed/golang-tour.md)
-  - [spec](/reviewed/golang-spec.md)
-  - [go命令行参数](/reviewed/golang-cmd.md)
+  - 官方文档,对go的一个大致描述
+    - [介绍](/reviewed/golang-introduce.md)
+    - [基础教程](/reviewed/golang-tour.md)
+    - [细节](/reviewed/golang-details.md)
+    - [go命令行参数](/reviewed/golang-cmd.md)
+  - 内存模型
+  - faq
 
 ## waiting for review
+
+- golang 官方文档
+  - spec
+    - [spec介绍](/waiting-for-review/go-spec-introduce.md)
+    - [符号](/waiting-for-review/go-spec-notation.md)
+    - [源码格式](/waiting-for-review/go-spec-source-fmt.md)
+    - [词法](/waiting-for-review/go-spec-lexical.md)
+    - [常量](/waiting-for-review/go-spec-constants.md)
+    - [类型](/waiting-for-review/go-spec-types.md)
+    - [类型和值的属性](/waiting-for-review/go-spec-properties.md)
+    - [代码块](/waiting-for-review/go-spec-blocks.md)
+    - [声明和作用域](/waiting-for-review/go-spec-scope.md)
 
 ## TODO
 
