@@ -39,12 +39,6 @@
     - [基础教程](/reviewed/golang-tour.md)
     - [细节](/reviewed/golang-details.md)
     - [go命令行参数](/reviewed/golang-cmd.md)
-  - 内存模型
-  - faq
-
-## waiting for review
-
-- golang 官方文档
   - spec
     - [spec介绍](/waiting-for-review/go-spec-introduce.md)
     - [符号](/waiting-for-review/go-spec-notation.md)
@@ -55,6 +49,10 @@
     - [类型和值的属性](/waiting-for-review/go-spec-properties.md)
     - [代码块](/waiting-for-review/go-spec-blocks.md)
     - [声明和作用域](/waiting-for-review/go-spec-scope.md)
+  - 内存模型
+  - faq
+
+## waiting for review
 
 ## TODO
 
