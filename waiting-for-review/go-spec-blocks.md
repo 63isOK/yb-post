@@ -13,6 +13,8 @@
 - 块都是可嵌套的
 - 显示块就很简单:大括号包着的就是
 
+eg:
+
     type struct abc {
         a,b int
         c,d string

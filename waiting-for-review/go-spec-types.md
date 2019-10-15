@@ -96,6 +96,8 @@ ebnf:
 - 这个嵌入的field可以是类型名T,也可以是\*T(此时T不能是接口类型)
 - filed名不能重复 struct{ T, \*T, \*p.T } 就是错误的
 
+结构体里的嵌入字段
+
     // A struct with four embedded fields of types T1, *T2, P.T3 and *P.T4
     struct {
       T1        // field name is T1
@@ -128,6 +130,8 @@ ebnf:
 - 相同参数类型,相同结果类型的所有函数集合,称为函数类型
 - 未初始化值是nil
 
+ebnf:
+
     FunctionType   = "func" Signature .
     Signature      = Parameters [ Result ] .
     Result         = Parameters | Type .
@@ -143,6 +147,8 @@ ebnf:
 - 接口类型,内含方法集
 - 接口类型的变量,可存储任何实现了接口的类型的任何实例
 - 未初始化的接口变量是nil
+
+ebnf:
 
     InterfaceType      = "interface" "{" { MethodSpec ";" } "}" .
     MethodSpec         = MethodName Signature | InterfaceTypeName .
