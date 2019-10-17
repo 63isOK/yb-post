@@ -51,12 +51,11 @@
     - [声明和作用域](/reviewed/go-spec-scope.md)
   - 内存模型
   - faq
+- go发布历史:
+[v1.12](/reviewed/go-history-v1.12.md),
+[v1.13](/reviewed/go-history-v1.13.md)
 
 ## waiting for review
-
-- go发布历史:
-[v1.12](/waiting-for-review/go-history-v1.12.md),
-[v1.13](/waiting-for-review/go-history-v1.13.md)
 
 ## TODO
 
