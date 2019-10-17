@@ -3,4 +3,4 @@
 v1.13
 
 - container
-  - list [双向链表](/waiting-for-review/pkg/container-list.md)
+  - list [双向链表](/reviewed/pkg/container-list.md)
