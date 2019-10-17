@@ -54,6 +54,7 @@
 - go发布历史:
 [v1.12](/reviewed/go-history-v1.12.md),
 [v1.13](/reviewed/go-history-v1.13.md)
+- golang [标准库](/reviewed/go-pkg.md)
 
 ## waiting for review
 
