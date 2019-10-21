@@ -55,6 +55,8 @@
 [v1.12](/reviewed/go-history-v1.12.md),
 [v1.13](/reviewed/go-history-v1.13.md)
 - golang [标准库](/reviewed/go-pkg.md)
+- 树,[二叉树](/reviewed/binary-tree.md)
+[二叉搜索树](/reviewed/binary-search-tree.md)
 
 ## waiting for review
 
