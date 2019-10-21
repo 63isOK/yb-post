@@ -58,6 +58,9 @@
 
 ## waiting for review
 
+- 树,[二叉树](/waiting-for-review/binary-tree.md)
+[二叉搜索树](/waiting-for-review/binary-search-tree.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
