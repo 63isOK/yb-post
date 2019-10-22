@@ -60,6 +60,9 @@
 
 ## waiting for review
 
+- 页面置换算法[了解](/waiting-for-review/page-replacement-algorithm.md),
+[缓存替换策略](/waiting-for-review/cache-replacement-policies.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
