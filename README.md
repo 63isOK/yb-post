@@ -57,11 +57,10 @@
 - golang [标准库](/reviewed/go-pkg.md)
 - 树,[二叉树](/reviewed/binary-tree.md)
 [二叉搜索树](/reviewed/binary-search-tree.md)
+- 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
+[缓存替换策略](/reviewed/cache-replacement-policies.md)
 
 ## waiting for review
-
-- 页面置换算法[了解](/waiting-for-review/page-replacement-algorithm.md),
-[缓存替换策略](/waiting-for-review/cache-replacement-policies.md)
 
 ## TODO
 
