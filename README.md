@@ -62,6 +62,10 @@
 
 ## waiting for review
 
+- 多路复用[了解](/waiting-for-review/multiplexing.md),
+[epoll](/waiting-for-review/multiplexing-epoll.md),
+[select](/waiting-for-review/multiplexing-select.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
