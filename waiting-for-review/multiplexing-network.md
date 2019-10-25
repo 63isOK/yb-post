@@ -18,11 +18,11 @@
 
 unix下有5种i/o模型：
 
-- 阻塞io
-- 非阻塞io
-- io复用(select,poll)
-- 信号驱动式io (sigio)
-- 异步io (posix系列)
+- 阻塞I/O
+- 非阻塞I/O
+- I/O复用(select,poll)
+- 信号驱动式I/O (sigio)
+- 异步I/O (posix系列)
 
 网络程序怎么将网络那边的数据获取到：
 
@@ -42,3 +42,16 @@ recvfrom(),接收udp数据的系统调用，执行过程如下：
 - recvfrom接收到成功提示，返回  用户态
 
 整个过程中，recvfrom是阻塞的。
+应用程序调用recvfrom时，系统会将应用程序挂起，等执行完之后，唤醒应用程序。
+
+### 非阻塞I/O模型
+
+如果socket被指定为非阻塞时，调用recvfrom，应用程序挂起，
+内核发现socket是非阻塞的，会立马将recvfrom唤醒，此时数据还没到内核缓存区，
+recvfrom会返回一个特定错误，然后应用程序可以去干其他事，内核继续等待数据。
+再次调用recvfrom，如果内核发现数据已经准备好，会立马给recvfrom并返回成功。
+
+整个过程中，recvfrom会多次调用，被称为轮询 polling。
+
+一般不知道数据什么时候会准备好，polling会浪费大量cpu时间，所以这种模型很少见，
+只出现在某些特殊的系统功能上。
