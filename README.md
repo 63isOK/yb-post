@@ -59,10 +59,9 @@
 [二叉搜索树](/reviewed/binary-search-tree.md)
 - 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
 [缓存替换策略](/reviewed/cache-replacement-policies.md)
+- 使用github，git commit怎么写[才高效](/reviewed/github-commit.md)
 
 ## waiting for review
-
-- 使用github，git commit怎么写[才高效](/waiting-for-review/github-commit.md)
 
 ## TODO
 
