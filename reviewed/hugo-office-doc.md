@@ -215,7 +215,7 @@ hugo --environment staging 表示使用测试环境配置,会使用staging和\_d
   - verboseLog (false) 默认不启用详细日志记录
   - watch (false) 默认不启用实时加载
 
-命令行查看配置: 
+命令行查看配置:
 
 ```shell
 hugo config | grep watch

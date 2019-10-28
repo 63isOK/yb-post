@@ -60,6 +60,7 @@
 - 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
 [缓存替换策略](/reviewed/cache-replacement-policies.md)
 - 使用github，git commit怎么写[才高效](/reviewed/github-commit.md)
+- github issues的[基本使用](/reviewed/github-issue.md)
 
 ## waiting for review
 
