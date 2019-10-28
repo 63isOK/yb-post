@@ -62,6 +62,8 @@
 
 ## waiting for review
 
+- 使用github，git commit怎么写[才高效](/waiting-for-reveiw/github-commit.md)
+
 ## TODO
 
 - hugo, 官方文档未补全
