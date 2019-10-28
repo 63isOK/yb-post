@@ -62,7 +62,7 @@
 
 ## waiting for review
 
-- 使用github，git commit怎么写[才高效](/waiting-for-reveiw/github-commit.md)
+- 使用github，git commit怎么写[才高效](/waiting-for-review/github-commit.md)
 
 ## TODO
 
