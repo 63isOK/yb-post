@@ -70,6 +70,7 @@
     - GoConvey[测试的编写](/waiting-for-review/goconvey-composition.md)
     - [断言](/waiting-for-review/goconvey-assert.md)
     - [执行顺序和忽略](/waiting-for-review/goconvey-exec.md)
+    - [配置](/waiting-for-review/goconvey-profile.md)
 
 ## waiting for review
 
