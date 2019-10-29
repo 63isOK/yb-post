@@ -67,6 +67,7 @@
   - GoConvey,一个BDD测试框架
     - GoConvey的[介绍](/waiting-for-review/goconvey-introduce.md),
 第一次试用感觉真心好，不愧是chrome都集成的开源库
+    - GoConvey[测试的编写](/waiting-for-review/goconvey-composition.md),
 
 ## waiting for review
 
