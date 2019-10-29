@@ -67,8 +67,9 @@
   - GoConvey,一个BDD测试框架
     - GoConvey的[介绍](/waiting-for-review/goconvey-introduce.md),
 第一次试用感觉真心好，不愧是chrome都集成的开源库
-    - GoConvey[测试的编写](/waiting-for-review/goconvey-composition.md),
-    - [断言](/waiting-for-review/goconvey-assert.md),
+    - GoConvey[测试的编写](/waiting-for-review/goconvey-composition.md)
+    - [断言](/waiting-for-review/goconvey-assert.md)
+    - [执行顺序和忽略](/waiting-for-review/goconvey-exec.md)
 
 ## waiting for review
 
