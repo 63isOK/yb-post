@@ -62,6 +62,8 @@
 - 使用github，git commit怎么写[才高效](/reviewed/github-commit.md)
 - github issues的[基本使用](/reviewed/github-issue.md)
 - github codeowners的[基本使用](/reviewed/github-codeowners.md)
+- test
+  - BDD 行为驱动测试，常用在用户验收测试(UAT)。BDD概念的[补充](/reviewed/test-bdd.md)
 
 ## waiting for review
 
