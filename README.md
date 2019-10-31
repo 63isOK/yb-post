@@ -72,6 +72,7 @@
     - [执行顺序和忽略](/waiting-for-review/goconvey-exec.md)
     - [配置](/waiting-for-review/goconvey-profile.md)
     - [faq](/waiting-for-review/goconvey-faq.md)
+    - [reset](/waiting-for-review/goconvey-reset.md)
 
 ## waiting for review
 
