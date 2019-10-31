@@ -65,14 +65,14 @@
 - test
   - BDD 行为驱动测试，常用在用户验收测试(UAT)。BDD概念的[补充](/reviewed/test-bdd.md)
   - GoConvey,一个BDD测试框架
-    - GoConvey的[介绍](/waiting-for-review/goconvey-introduce.md),
+    - GoConvey的[介绍](/reviewed/goconvey-introduce.md),
 第一次试用感觉真心好，不愧是chrome都集成的开源库
-    - GoConvey[测试的编写](/waiting-for-review/goconvey-composition.md)
-    - [断言](/waiting-for-review/goconvey-assert.md)
-    - [执行顺序和忽略](/waiting-for-review/goconvey-exec.md)
-    - [配置](/waiting-for-review/goconvey-profile.md)
-    - [faq](/waiting-for-review/goconvey-faq.md)
-    - [reset](/waiting-for-review/goconvey-reset.md)
+    - GoConvey[测试的编写](/reviewed/goconvey-composition.md)
+    - [断言](/reviewed/goconvey-assert.md)
+    - [执行顺序和忽略](/reviewed/goconvey-exec.md)
+    - [配置](/reviewed/goconvey-profile.md)
+    - [faq](/reviewed/goconvey-faq.md)
+    - [reset](/reviewed/goconvey-reset.md)
 
 ## waiting for review
 
