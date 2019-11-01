@@ -95,3 +95,89 @@ asynchronous I/O, 是posix规范中定义的。
 
 posix的定义，同步io操作做是请求会导致进程阻塞，直到io操作完成，
 这样前4种io模型都属于这列，异步io就是指异步io模型。
+
+## select
+
+archlinux中的实现是同步io复用
+
+函数功能：允许进程指示内核等待多个事件中的任何一个发生，
+并只在有一个或多个事情发生或经历一段指定的时间后才唤醒它。
+
+    #include <sys/select.h>
+
+    int select(int nfds, fd_set *restrict readfds,
+       fd_set *restrict writefds, fd_set *restrict errorfds,
+       struct timeval *restrict timeout);
+
+最后一个参数是时间：
+
+- 为空，表示永久等待
+- 为0, 表示不等待，检查完状态立马返回
+- 非空非零值，表示超时时间
+
+FD_ZERO/ FD_SET/ FD_CLR/ FD_ISSET 4个宏配合描述符集使用。
+第一个参数是最大描述符个数，= 待测试的最大描述符 + 1
+
+通常的使用过程：
+
+1. 用宏配置好描述符集
+2. 调用select
+3. select返回后，用FD_ISSET检查，并处理
+4. 重新配置描述符集，然后继续select，就是1-3的循环
+
+socket准备好读，满足下列4个条件之一即可：
+
+1. socket接收缓冲区的数据字节数大于"接收缓存区低水位标记的大小,默认是1"
+2. tcp连接接收到了fin，此时不会阻塞，会返回0
+3. socket是一个监听socket，并已完成的连接数不是0，此时accept一般不会阻塞
+4. 有一个socket错误待处理，此时不会阻塞，并返回-1
+
+socket准备好写，满足下列4个条件之一即可：
+
+1. 发送缓冲区的自己数大于"发送缓冲区低水位标记的大小，默认是2048"
+2. tcp连接已接受到fin，写会产生sigpipe信号
+3. socket是非阻塞，并已经connect，或connect失败了
+4. socket有待处理错误
+
+## pselect
+
+posix 整出来的一个新东西，和select做的事是类似的。有两个变化：
+
+1. 时间参数的精度从毫秒改为纳秒
+2. 增加一个新参数，执行信号掩码的指针
+
+一般情况是这样的：
+
+1. 检查有没有信号，有就调用信号处理函数(因为信号不是事件，而是异步消息)
+2. 调用select来捕获事件和信号
+
+如果1和2中间发生了信号，那么select就无法捕获，而此时进程会被无限阻塞，
+pselect的新增参数就可以解决这个问题。
+
+## poll
+
+    #include <poll.h>
+    
+    int poll(struct pollfd fds[], nfds_t nfds, int timeout);
+
+提供的功能和select类似。
+
+第一个参数是数组，里面是pollfd结构体.select的fd数是有限制的，poll使用数组的方式，
+解决了select最大fd是1024的限制。
+
+## epoll
+
+和poll类似，不过epoll是事件驱动的，每次调用后，会告诉用户哪些socket的事件触发了，
+select和poll是将整个描述符集返回给用户，让用户去遍历，去用宏测试，
+一旦描述符多了，效率差异就很大了。
+
+其次epoll还有水平触发lt和边缘触发et，水平触发是用户如果不处理，下次调用还会通知，
+边缘触发是用户不处理，那后面也不会再提示了。
+
+另外每次调用select/poll，都需要将fd拷贝到内核态，epoll只需要拷贝一次。
+
+## 说明
+
+- 1984年，实现了select，此时有了io复用
+- 1997年，实现了poll，当时监听多个socket的程序就很多了，有了需求就有了发展
+- 2002年，实现了epoll，提升了效率
