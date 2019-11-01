@@ -78,8 +78,7 @@
 
 - 多路复用[了解](/waiting-for-review/multiplexing.md),
 [事件循环](/waiting-for-review/event-loop.md),
-[epoll](/waiting-for-review/multiplexing-epoll.md),
-[select](/waiting-for-review/multiplexing-select.md)
+i/o多路复用[select/pselect/poll/epoll](/waiting-for-review/multiplexing-network.md)
 
 ## TODO
 
