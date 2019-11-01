@@ -73,6 +73,9 @@
     - [配置](/reviewed/goconvey-profile.md)
     - [faq](/reviewed/goconvey-faq.md)
     - [reset](/reviewed/goconvey-reset.md)
+- 多路复用[了解](/reviewed/multiplexing.md),
+[事件循环](/reviewed/event-loop.md),
+i/o多路复用[select/pselect/poll/epoll](/reviewed/multiplexing-network.md)
 
 ## waiting for review
 
