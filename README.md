@@ -59,6 +59,20 @@
 [二叉搜索树](/reviewed/binary-search-tree.md)
 - 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
 [缓存替换策略](/reviewed/cache-replacement-policies.md)
+- 使用github，git commit怎么写[才高效](/reviewed/github-commit.md)
+- github issues的[基本使用](/reviewed/github-issue.md)
+- github codeowners的[基本使用](/reviewed/github-codeowners.md)
+- test
+  - BDD 行为驱动测试，常用在用户验收测试(UAT)。BDD概念的[补充](/reviewed/test-bdd.md)
+  - GoConvey,一个BDD测试框架
+    - GoConvey的[介绍](/reviewed/goconvey-introduce.md),
+第一次试用感觉真心好，不愧是chrome都集成的开源库
+    - GoConvey[测试的编写](/reviewed/goconvey-composition.md)
+    - [断言](/reviewed/goconvey-assert.md)
+    - [执行顺序和忽略](/reviewed/goconvey-exec.md)
+    - [配置](/reviewed/goconvey-profile.md)
+    - [faq](/reviewed/goconvey-faq.md)
+    - [reset](/reviewed/goconvey-reset.md)
 
 ## waiting for review
 
