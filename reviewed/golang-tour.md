@@ -722,7 +722,7 @@ go中的接口变量，下面简称接口
   }
 ```
 
-使用switch和type关键字来组合成一个type switch，不会像上面会包异常,
+使用switch和type关键字来组合成一个type switch，不会像上面会报异常,
 switch和type是一个组合技能，i.(type)单独拆开不能使用
 
 在default中，v的值和i一样
