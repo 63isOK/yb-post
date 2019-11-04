@@ -103,4 +103,100 @@
 
 这个和godoc还是有点不一样的，godoc会用h5来显示，go doc直接打印出结果
 
+## 显示go的环境变量信息
 
+    go env [-json] [-u] [-w] [var ...]
+
+## 使用新api更新包
+
+    go fix [packages]
+
+## 格式化源码 gofmt
+
+    go fmt [-n] [-x] [packages]
+
+## 通过源码生成go文件
+
+    go generate [-run regexp] [-n] [-v] [-x] [build flags] [file.go... | packages]
+
+## 给当前module添加一个依赖，并安装
+
+    go get [-d] [-t] [-u] [-v] [-insecure] [build flags] [packages]
+
+这个命令使用的非常频繁。
+
+这个命令做得到第一件事添加依赖。
+
+每个包都有一个版本号，类似 v1.1.1的tag，
+如果没有tag，就找预发布版本，类似 v0.0.1-pre1,
+如果这些都没有，就找最近一次提交。
+
+如果依赖指明了具体的版本，就找指定版本，如果没有就取当前版本。
+
+可以通过@来指定依赖的版本，eg：'go get golang.org/x/text@v0.3.0'。
+
+如果有源码管理工具，可能就有提交hash/分支标记/其他标记，
+也可以使用'go get golang.org/x/text@master'，分支名不能重叠，
+eg：@v2指v2开头的版本，而不是v2分支。
+
+指定一个版本@v1.1.1,目前依赖有两个版本v1.1.0和v1.1.3，
+最后会选择v1.1.3，这里考虑到了向前兼容。
+
+- -t 表示会运行包的测试文件
+- -u 会更新依赖的版本
+- -u=patch，表示使用release优先
+
+这个命令做的第二件事就是下载依赖，构建/安装
+
+## 编译并安装包和依赖
+
+    go install [-i] [build flags] [packages]
+
+可执行会丢在GOBIN下，就是GOPATH/bin。
+
+不开启go module，会安装到GOBIN，开启go module，最后包会被构建，
+被缓存，但不是安装。
+
+- -i表示安装
+
+## 显示包或module
+
+    go list [-f format] [-json] [-m] [list flags] [build flags] [packages]
+
+这个命令非常有用，可显示指定包的依赖关系，
+也可安装包分组来分析，目前有builtin和std两种。
+
+## module 维护
+
+    go mod <command> [arguments]
+
+go mod已经渗透到go命令的方方面面了。
+
+commands包括：
+
+- download    下载module到本地，进行缓存
+- edit        编辑go.mod
+- graph       显示模块的依赖图
+- init        在当前目录初始化一个新的module
+- tidy        添加遗失的模块信息，删除无用的模块信息
+- vendor      制作第三方依赖的副本
+- verify      校验依赖，是否完整正确
+- why         解释为啥需要包或module,这个会解释哪个包用到了指定模块
+
+## 编译并运行go程序
+
+    go run [build flags] [-exec xprog] package [arguments...]
+
+不安装，运行完之后，会自动将编译的文件删除掉。
+
+## 对包进行测试
+
+    go test [build/test flags] [packages] [build/test flags & test binary flags]
+
+go test会先查找\_test.go结尾的文件，这些文件里可能包含了测试函数，
+基准测试函数，或是example函数。
+
+\_test.go文件会被单独编译成一个包，并链接，并和可执行二进制一起进行测试。
+
+go tool会自动忽略一个叫testdata的目录，并从这个目录提取数据作为辅助数据，
+给其他测试用。
