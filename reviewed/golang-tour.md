@@ -6,10 +6,10 @@
 * 方法和接口
 * 并发原语
 
-~~安装是 go get golang.org/x/tour,要翻墙，或者直接访问
-<https://tour.golang.org/welcome/1>。
+~~安装是 go get golang.org/x/tour,要翻墙，或者直接访问~~
+~~<https://tour.golang.org/welcome/1>。~~
 
-不翻墙的走： go get -u github.com/Go-zh/tour, 之后执行tour~~
+~~不翻墙的走： go get -u github.com/Go-zh/tour, 之后执行tour~~
 
 学习tour最新的方法是
 
