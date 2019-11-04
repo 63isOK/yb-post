@@ -35,7 +35,8 @@
   - [faq](/reviewed/grpc-faq.md)
 - golang 官方文档
   - 官方文档,对go的一个大致描述
-    - [介绍](/reviewed/golang-introduce.md)
+    - [介绍](/reviewed/golang-introduce.md),
+[安装](/reviewed/golang-install.md)
     - [基础教程](/reviewed/golang-tour.md)
     - [细节](/reviewed/golang-details.md)
     - [go命令行参数](/reviewed/golang-cmd.md)
