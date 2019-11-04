@@ -38,7 +38,8 @@
     - [介绍](/reviewed/golang-introduce.md),
 [安装](/reviewed/golang-install.md)
     - [基础教程](/reviewed/golang-tour.md)
-    - [细节](/reviewed/golang-details.md)
+    - [如何写go代码](/reviewed/golang-code.md)
+    - [effective go](/reviewed/golang-effective.md)
     - [go命令行参数](/reviewed/golang-cmd.md)
   - spec
     - [spec介绍](/reviewed/go-spec-introduce.md)
