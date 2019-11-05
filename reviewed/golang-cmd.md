@@ -200,3 +200,56 @@ go test会先查找\_test.go结尾的文件，这些文件里可能包含了测�
 
 go tool会自动忽略一个叫testdata的目录，并从这个目录提取数据作为辅助数据，
 给其他测试用。
+
+go test 会先调用 go vet来查看是否有依赖确实的问题，如果有，就不会执行后面的了。
+当然，这个go vet测试是可以关闭的。
+
+测试结果和总结会输出到标准输出。
+
+go test有两种运行方式：
+
+- 本地目录方式
+  - 这种方式，运行命令中不带包信息，eg： go test -v .
+  - 不启用缓存
+- 包列表方式
+  - go test命令中带了明确的包信息
+  - eg: go test ./...
+  - eg: go test math
+
+只有在包列表模式下，才会启用缓存机制，如果使用了缓存，总结处会显示cached，
+而不是花了多长时间。缓存匹配的条件是测试同一个可执行，flag都一样。
+
+## 运行指定工具
+
+    go tool [-n] command [args...]
+
+## 打印go版本
+
+    go version [-m] [-v] [file ...]
+
+## 报告包中可能存在的错误
+
+    go vet [-n] [-x] [-vettool prog] [build flags] [vet flags] [packages]
+
+## 构建模式
+
+## go和c的互调
+
+- cgo工具
+- swig程序
+
+## 构建和测试的缓存
+
+GOCACHE，GODEBUG
+
+## 环境变量
+
+## 可识别的文件类型
+
+- .go go源码
+- .c .h c源码
+- .cc .cpp .cxx .hh .hp .hxx c++yuanma 
+- .m objective-c源码
+- .s .S 汇编源码
+- .swig .swigcxx swig定义文件
+- .syso 系统对象文件
