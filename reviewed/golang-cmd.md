@@ -248,8 +248,117 @@ GOCACHE，GODEBUG
 
 - .go go源码
 - .c .h c源码
-- .cc .cpp .cxx .hh .hp .hxx c++yuanma 
+- .cc .cpp .cxx .hh .hp .hxx c++源码
 - .m objective-c源码
 - .s .S 汇编源码
 - .swig .swigcxx swig定义文件
 - .syso 系统对象文件
+
+## go.mod 文件
+
+用一个源码树来定义模块的版本，就是根目录下的go.mod文件。
+
+go命令被执行时，首先会在当前目录下查找，之后去父目录查找，
+找到了，那个目录就被称为main模块。
+
+go.mod里注释是//开头，每一行就是一个指令，由动词+参数构成
+
+动词如下：
+
+- module，定义module路径
+- go，指定golang预期版本
+- require，要求使用指定版本，或比指定版本高的某个模块
+- exclude，排除某个模块的特定版本
+- replace，替换一个新的module版本
+
+后两个动词，只用于main模块的go.mod,忽略依赖。
+同一个动词是可以做"因式分解"的。
+go.mod文件可以被直接编辑(go mod edit)，也可以由工具来更新。
+
+执行go命令，每次都会自动更新go.mod
+
+## GOPATH和go module
+
+当启用go module时，解决导入就不需要和GOPATH强绑定了，
+下载的源码还在GOPATH/pkg/mod下，安装依然在GOBIN
+
+## 导入import
+
+导入远程仓库，eg：github，导入本地包，可使用相对路径。
+
+在指明import路径的同时，也可以指明版本管理工具,通过后缀：
+
+- .git  Git
+- .svn Subversion
+
+其他的版本控制工具也是类似的。
+
+## 导入路径的检查
+
+    package math // import "path"
+    package math /* import "path" */
+
+这是一个新特性，一个包有两个可能的导入路径
+
+## module
+
+module就是相关包的集合，是源码导入和版本控制的最小单元。
+module解决了依赖问题。v1.13就开始支持go module了
+
+## module的定义
+
+根目录下的go.mod用于定义module。从这个根目录开始，包括所有子目录，
+都是这个module的内容，例外：某个子目录包含go.mod，就是一个新的。
+
+    go mod init github.com/interview
+
+## main module和构建列表
+
+包含go.mod的目录，就是main module。
+
+module中提供的包，称为构建列表 build list，
+处死会话时只包含一个main module，go命令会更新。
+
+用 go list就可以看到main module和build list
+
+## 维护必须的module
+
+一般都是go命令自动维护
+
+## 伪版本
+
+也就是go mod提出的"带语义的版本"，v1.0.2是常用的版本，
+v0.0.0-yyyymmddhhmmss-abcdefabcdef 就是伪版本，也需要支持，
+总的来说，有以下几种：
+
+- vX.0.0-yyyymmddhhmmss-abcdefabcdef
+- vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef
+- vX.Y.(Z+1)-0.yyyymmddhhmmss-abcdefabcdef
+
+## module 查询
+
+v1.2.3是一个完全语义的版本，
+v1,v1.2就是一个带前缀的语义版本，前缀需要去做匹配，
+语义版本是支持比较的，"\<v1.1.1",">=v2.2.1"。
+
+latest可以匹配最后一个tagged版本，或者是没有tagged的最后一个版本。
+
+upgrade和latest类似，不过upgrade是取下一个版本，而不是最后一个版本。
+
+patch，匹配最后一个tagged版本，major/minor都匹配，然后取最后一个patch，
+如果没有指定版本，patch就等于latest。
+
+语义匹配一般有提交的hash，tag/分支名，发布版本。
+tag/分支名的匹配规则是另一套，所以v2匹配上的是发布版本，而不是分支名等。
+所有的查询优先匹配前一个release版本，"\<v1.1.1",会匹配"v1.1.0",
+而不是"v1.1.1-pre1".
+
+## module 兼容性和语义版本
+
+要求module在一个大版本里是兼容的，不兼容的用另一个大版本
+
+## go test
+
+go test 带两类参数，一类给go test自己用，一类给结果用。
+
+具体的测试用例可包含单元测试/基准测试/例子
