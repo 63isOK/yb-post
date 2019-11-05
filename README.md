@@ -54,6 +54,20 @@
     - [声明和作用域](/reviewed/go-spec-scope.md)
   - 内存模型
   - faq
+    - [项目起源](/reviewed/faq/golang-faq-origins.md)
+    - [用法](/reviewed/faq/golang-faq-usage.md)
+    - [设计](/reviewed/faq/golang-faq-design.md)
+    - [类型](/reviewed/faq/golang-faq-type.md)
+    - [值](/reviewed/faq/golang-faq-value.md)
+    - [代码编写](/reviewed/faq/golang-faq-writing-code.md)
+    - [指针和内存申请](/reviewed/faq/golang-faq-pointer.md)
+    - [并发](/reviewed/faq/golang-faq-concurrency.md)
+    - [函数和方法](/reviewed/faq/golang-faq-func-method.md)
+    - [控制流](/reviewed/faq/golang-faq-flow.md)
+    - [包和测试](/reviewed/faq/golang-faq-package-testing.md)
+    - [实现](/reviewed/faq/golang-faq-impl.md)
+    - [性能](/reviewed/faq/golang-faq-performance.md)
+    - [和c的不同](/reviewed/faq/golang-faq-c.md)
 - go发布历史:
 [v1.12](/reviewed/go-history-v1.12.md),
 [v1.13](/reviewed/go-history-v1.13.md)
