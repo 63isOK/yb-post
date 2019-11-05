@@ -55,7 +55,7 @@
   - 内存模型
   - faq
     - [项目起源](/reviewed/faq/golang-faq-origins.md)
-    - [用法](/reviewed/faq/golang-faq-usage.md)
+    - [使用情况](/reviewed/faq/golang-faq-usage.md)
     - [设计](/reviewed/faq/golang-faq-design.md)
     - [类型](/reviewed/faq/golang-faq-type.md)
     - [值](/reviewed/faq/golang-faq-value.md)
