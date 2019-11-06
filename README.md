@@ -41,6 +41,7 @@
     - [如何写go代码](/reviewed/golang-code.md)
     - [effective go](/reviewed/golang-effective.md)
     - [go命令行参数](/reviewed/golang-cmd.md)
+    - [命令行文档](/reviewed/golang-cmd-other.md)
     - [诊断](/reviewed/golang-diagnose.md)
   - spec
     - [spec介绍](/reviewed/go-spec-introduce.md)
