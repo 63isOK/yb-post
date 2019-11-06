@@ -33,16 +33,16 @@
   - [概念](/reviewed/grpc-concepts.md)
   - [异步调用](/reviewed/grpc-async.md)
   - [faq](/reviewed/grpc-faq.md)
-- golang 官方文档
+- go 官方文档
   - 官方文档,对go的一个大致描述
-    - [介绍](/reviewed/golang-introduce.md),
-[安装](/reviewed/golang-install.md)
-    - [基础教程](/reviewed/golang-tour.md)
-    - [如何写go代码](/reviewed/golang-code.md)
-    - [effective go](/reviewed/golang-effective.md)
-    - [go命令行参数](/reviewed/golang-cmd.md)
-    - [命令行文档](/reviewed/golang-cmd-other.md)
-    - [诊断](/reviewed/golang-diagnose.md)
+    - [介绍](/reviewed/go-introduce.md),
+[安装](/reviewed/go-install.md)
+    - [基础教程](/reviewed/go-tour.md)
+    - [如何写go代码](/reviewed/go-code.md)
+    - [effective go](/reviewed/go-effective.md)
+    - [go命令行参数](/reviewed/go-cmd.md)
+    - [命令行文档](/reviewed/go-cmd-other.md)
+    - [诊断](/reviewed/go-diagnose.md)
   - spec
     - [spec介绍](/reviewed/go-spec-introduce.md)
     - [符号](/reviewed/go-spec-notation.md)
@@ -55,24 +55,24 @@
     - [声明和作用域](/reviewed/go-spec-scope.md)
   - 内存模型
   - faq
-    - [项目起源](/reviewed/faq/golang-faq-origins.md)
-    - [使用情况](/reviewed/faq/golang-faq-usage.md)
-    - [设计](/reviewed/faq/golang-faq-design.md)
-    - [类型](/reviewed/faq/golang-faq-type.md)
-    - [值](/reviewed/faq/golang-faq-value.md)
-    - [代码编写](/reviewed/faq/golang-faq-writing-code.md)
-    - [指针和内存申请](/reviewed/faq/golang-faq-pointer.md)
-    - [并发](/reviewed/faq/golang-faq-concurrency.md)
-    - [函数和方法](/reviewed/faq/golang-faq-func-method.md)
-    - [控制流](/reviewed/faq/golang-faq-flow.md)
-    - [包和测试](/reviewed/faq/golang-faq-package-testing.md)
-    - [实现](/reviewed/faq/golang-faq-impl.md)
-    - [性能](/reviewed/faq/golang-faq-performance.md)
-    - [和c的不同](/reviewed/faq/golang-faq-c.md)
+    - [项目起源](/reviewed/faq/go-faq-origins.md)
+    - [使用情况](/reviewed/faq/go-faq-usage.md)
+    - [设计](/reviewed/faq/go-faq-design.md)
+    - [类型](/reviewed/faq/go-faq-type.md)
+    - [值](/reviewed/faq/go-faq-value.md)
+    - [代码编写](/reviewed/faq/go-faq-writing-code.md)
+    - [指针和内存申请](/reviewed/faq/go-faq-pointer.md)
+    - [并发](/reviewed/faq/go-faq-concurrency.md)
+    - [函数和方法](/reviewed/faq/go-faq-func-method.md)
+    - [控制流](/reviewed/faq/go-faq-flow.md)
+    - [包和测试](/reviewed/faq/go-faq-package-testing.md)
+    - [实现](/reviewed/faq/go-faq-impl.md)
+    - [性能](/reviewed/faq/go-faq-performance.md)
+    - [和c的不同](/reviewed/faq/go-faq-c.md)
 - go发布历史:
 [v1.12](/reviewed/go-history-v1.12.md),
 [v1.13](/reviewed/go-history-v1.13.md)
-- golang [标准库](/reviewed/go-pkg.md)
+- go [标准库](/reviewed/go-pkg.md)
 - 树,[二叉树](/reviewed/binary-tree.md)
 [二叉搜索树](/reviewed/binary-search-tree.md)
 - 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
