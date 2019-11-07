@@ -49,6 +49,7 @@
     - [源码格式](/reviewed/go-spec-source-fmt.md)
     - [词法](/reviewed/go-spec-lexical.md)
     - [常量](/reviewed/go-spec-constants.md)
+    - [变量](/reviewed/go-spec-variables.md)
     - [类型](/reviewed/go-spec-types.md)
     - [类型和值的属性](/reviewed/go-spec-properties.md)
     - [代码块](/reviewed/go-spec-blocks.md)
