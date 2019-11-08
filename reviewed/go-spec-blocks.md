@@ -1,11 +1,12 @@
 # 代码块
 
+块是由{}包围的语句，是在声明时的一个序列，可能为空
+
     Block = "{" StatementList "}" .
     StatementList = { Statement ";" } .
 
-- 代码块有可能为空
 - 源码中除了显式的块,还有隐式的:
-  - 在go源码文本之外还有一个块,这个块包含了源码中所有的块,这个块叫universe,宇宙
+  - 所有的源码都在一个宇宙块中
   - 每一个package都有一个块,用于包含这个包中的go源码文本
   - 每一个文件还有一个文件块,包含了本文件中的go源码文本
   - if for switch 都有自己隐式的块
@@ -18,4 +19,8 @@ eg:
     type struct abc {
         a,b int
         c,d string
+    }
+    
+    func () {
+      ...
     }
