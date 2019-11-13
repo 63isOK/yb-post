@@ -733,3 +733,35 @@ x是接口类型，T是具体类型，这就是类型断言。
   - 乘积操作符优先级最高
   - 之后是加法操作符/逻辑比较/逻辑与/逻辑或
 - 同一级别的优先级，按从左到右的结合规则，先出现的先结合
+
+## 算术操作
+
+对于整数/浮点/复数类型，加减乘除都是适用的，+ 还适用于string，
+按位逻辑操作和位移操作只适合int。
+
+    +    sum                    integers, floats, complex values, strings
+    -    difference             integers, floats, complex values
+    *    product                integers, floats, complex values
+    /    quotient               integers, floats, complex values
+    %    remainder              integers
+
+    &    bitwise AND            integers
+    |    bitwise OR             integers
+    ^    bitwise XOR            integers
+    &^   bit clear (AND NOT)    integers
+
+    <<   left shift             integer << unsigned integer
+    >>   right shift            integer >> unsigned integer
+
+除可能会发生截断
+
+可能会发生整数溢出 overflow
+
+整数溢出会导致报运行时异常
+
+字符串可以使用 "+" "+="
+
+    s := "hi" + string(c)
+    s += " and good bye"
+
+
