@@ -829,3 +829,29 @@ t T
     var x *int = nil
     *x   // causes a run-time panic
     &*x  // causes a run-time panic
+
+## 接收操作符
+
+channel类型的操作数ch，接收操作<- ch的值就是ch信道里的值。
+其中的<- 就是接收操作符。接收操作的前提是保证方向是允许的。
+
+接收操作的类型信道元素的类型。这个表达式会阻塞，直到值可用。
+从一个nil信道执行接收操作，会永远阻塞。
+从一个已关闭的信道执行接收操作，会立马执行，再接收完所有的元素后，
+会接收一个元素的的零值。
+
+    v1 := <-ch
+    v2 = <-ch
+    f(<-ch)
+    <-strobe  // wait until clock pulse and discard received value
+
+接收表达式一般会用在赋值或初始化中
+
+    x, ok = <-ch        // 赋值
+    x, ok := <-ch       // 初始化
+    var x, ok = <-ch    // 初始化
+    var x, ok T = <-ch  // 这个T 是啥意思? 和类型断言的例子一样，后面分析
+
+ok是无类型的布尔值，用于表明通信是否成功，
+true表示已正确取到了一个对面发送的元素，
+false表示信道已经被关闭，此时x会是元素的零值
