@@ -855,3 +855,108 @@ channel类型的操作数ch，接收操作<- ch的值就是ch信道里的值。
 ok是无类型的布尔值，用于表明通信是否成功，
 true表示已正确取到了一个对面发送的元素，
 false表示信道已经被关闭，此时x会是元素的零值
+
+## 类型转换
+
+类型转换是说表达式的类型发生了转换。转换可以在源码中已字面量的方式出现，
+也可以在表达式的上下文中隐式出现。
+
+显示的类型转换格式如下：
+
+    Conversion = Type "(" Expression [ "," ] ")" .
+
+如果前面这个类型以 \* 或 <- 开头，或以func关键字开头且没有返回值，
+这个类型必须用()包括，不然会出现二义性。
+
+    *Point(p)        // same as *(Point(p))
+    (*Point)(p)      // p is converted to *Point
+    <-chan int(c)    // same as <-(chan int(c))
+    (<-chan int)(c)  // c is converted to <-chan int
+    func()(x)        // function signature func() x
+    (func())(x)      // x is converted to func()
+    (func() int)(x)  // x is converted to func() int
+    func() int(x)    // x is converted to func() int (unambiguous)
+
+常量x可以转换成类型T，前提是x可以用T的值表示。
+例外:整数常量是可以转换成string的，这个转换规则后面会提到。
+
+转换一个常量，会生成一个了带类型的常量
+
+    uint(iota)               // iota value of type uint
+    float32(2.718281828)     // 2.718281828 of type float32
+    complex128(1)            // 1.0 + 0.0i of type complex128
+    float32(0.49999999)      // 0.5 of type float32
+    float64(-1e-1000)        // 0.0 of type float64
+    string('x')              // "x" of type string
+    string(0x266c)           // "♬" of type string
+    MyString("foo" + "bar")  // "foobar" of type MyString
+    string([]byte{'a'})      // not a constant: []byte{'a'} is not a constant
+    (*int)(nil)              // not a constant: nil is not a constant, 
+                             // *int is not a boolean, numeric, or string type
+    int(1.2)                 // illegal: 1.2 cannot be represented as an int
+    string(65.0)             // illegal: 65.0 is not an integer constant
+
+非常量x，转换成类型T，只要满足以下一条即可
+
+- x可赋值给T的变量
+- 忽略结构体的tag，x的类型和T的有相同的底层类型
+- 忽略结构体的tag，x的类型和T都是指针类型，且不是自定义类型，底层类型是一样的
+- x的类型和T都是整数类型或浮点类型
+- x是整数，或[]byte,或rune，T是string类型
+- x是字符串，T是[]byte或rune
+
+转换的时候是不需要考虑结构体的tag的。
+
+转换在运行时会有花费。
+`所有的类型转换，只更改变类型，不改变值`
+
+指针和整数相互转换的机制，在Go中是没有的，unsafe包提供了有限的转换能力。
+
+数值之间的转换：
+
+- 整数转换，有符号转无符号，会隐式扩展成无限精度?,会进行截断，不会溢出
+- 浮点转整数，小数会被丢弃
+- 整数或浮点转浮点，复数转另一个复数类型，结果会四舍五入。
+
+字符串类型string的转换：
+
+- 有符号整数或无符号整数转string，会转换成对应的utf-8的字符串，
+超出的转成"\uFFFD"
+
+    string('a')       // "a"
+    string(-1)        // "\ufffd" == "\xef\xbf\xbd"
+    string(0xf8)      // "\u00f8" == "ø" == "\xc3\xb8"
+    type MyString string
+    MyString(0x65e5)  // "\u65e5" == "日" == "\xe6\x97\xa5"
+
+- []byte转string，按顺序将元素排列，就是字符串
+
+    string([]byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'})   // "hellø"
+    string([]byte{})                                     // ""
+    string([]byte(nil))                                  // ""
+
+    type MyBytes []byte
+    string(MyBytes{'h', 'e', 'l', 'l', '\xc3', '\xb8'})  // "hellø"
+
+- []rune转string
+
+    string([]rune{0x767d, 0x9d6c, 0x7fd4})   // "\u767d\u9d6c\u7fd4" == "白鵬翔"
+    string([]rune{})                         // ""
+    string([]rune(nil))                      // ""
+
+    type MyRunes []rune
+    string(MyRunes{0x767d, 0x9d6c, 0x7fd4})  // "\u767d\u9d6c\u7fd4" == "白鵬翔"
+
+- string 转[]byte
+
+    []byte("hellø")   // []byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'}
+    []byte("")        // []byte{}
+
+    MyBytes("hellø")  // []byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'}
+
+- string转 []rune
+
+    []rune(MyString("白鵬翔"))  // []rune{0x767d, 0x9d6c, 0x7fd4}
+    []rune("")                 // []rune{}
+
+    MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
