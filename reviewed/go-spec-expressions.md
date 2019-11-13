@@ -624,3 +624,45 @@ x是接口类型，T是具体类型，这就是类型断言。
 
 - `选择器表达式简写`，x是指针，(\*x).f可以简写为x.f
 - `调用表达式简写`，m是\*T的方法集，t的类型是T，(&t).m可简写为t.m
+
+## 可变参
+
+函数或方法的最后一个参数可以是可变参，用...Type来表示
+
+可变参表示实际过程中可以传递0个参数，或多个参数。
+0个参数表示nil;否则将参数作为[]T进行传递。
+
+    func Greeting(prefix string, who ...string)
+    Greeting("nobody")  
+                        // who 是nil
+    Greeting("hello:", "Joe", "Anna", "Eileen") 
+                        // who是[]string{"Joe", "Anna", "Eileen"}
+
+调用一个可变参函数或方法时，是这样的, 变量后跟...
+
+    s := []string{"James", "Jasmine"}
+    Greeting("goodbye:", s...)   // s...表示所有的可变参
+
+
+    func variadic(a ...int) {
+      if a == nil {
+        fmt.Println("a == nil")
+      } else {
+        fmt.Printf("here: %v\n", a)
+      }
+    }
+
+    func test2() {
+      variadic()
+      variadic(1)
+      i := []int{1, 2, 3}
+      variadic(i...)   // 在这个调用中，可变参[]T和i共享底层数组
+
+      fmt.Println("=========")
+    }
+    Output:
+    a == nil
+    here: [1]
+    here: [1 2 3]
+    =========
+    // 这个测试例子也印证了上面的话
