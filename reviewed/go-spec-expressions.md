@@ -544,3 +544,52 @@ x是一个指针，x.Mv会自动转换成(\*x).Mv, `这是选择器表达式的�
 相对于简单的切片表达式a[1:2],新增的max表示容量信息，具体容量是(max-low)
 
 其他特性和简单切片表达式的规则类似。
+
+## 类型断言表达式
+
+    x.(T)
+
+x是接口类型，T是具体类型，这就是类型断言。
+
+类型断言，判断x是不是nil，还判断了x里存储的值是不是T类型的。
+
+具体分析一下，如果T不是接口类型，类型断言就是看x的动态类型和T是不是同一个类型。
+这种情况下，如果T实现了x的接口，断言就是成功，其他情况，断言失败。
+如果T是一个接口，就是判断动态类型x是否实现了接口T。
+
+如果类型断言成立，表达式返回的值就是x的值，类型是T。类型断言是否成立，
+可以通过第二个返回值来判断。如果类型断言不成立，会报一个运行时异常。
+
+    var x interface{} = 7          // x has dynamic type int and value 7
+    i := x.(int)                   // i has type int and value 7
+                                   // int不是接口，就判断7和int是不是相同类型
+
+    type I interface { m() }
+
+    func f(y I) {
+      s := y.(string)    // illegal: 
+                         // string does not implement I (missing method m)
+                         // string没有实现I接口，所以会出错
+      r := y.(io.Reader) // r has type io.Reader and the dynamic type of y
+                         // must implement both I and io.Reader
+                         // io.Reader是接口，如果y还实现了io.Reader,断言成立
+      …
+    }
+
+个人理解：
+这个类型断言表达式，含有两种意义：
+
+- 接口变量中存的值是不是某个具体的类型
+- 接口变量中存的值是不是还实现了某个其他接口
+
+如果断言成立，表达式返回新的类型，值还是那个值。
+
+类型断言表达式一般用于赋值或初始化
+
+    v, ok = x.(T)           // 赋值
+    v, ok := x.(T)          // 初始化，至少有一个变量是新申请的
+    var v, ok = x.(T)       // 初始化
+    var v, ok T1 = x.(T)    // T1表示什么意思？ 只能看后面的spec有没有解释
+
+上面的ok，是一个无类型的bool值，断言成立就是true，失败就是false。
+失败时，v就是T类型的零值。多返回值的表达式不会产生运行时异常
