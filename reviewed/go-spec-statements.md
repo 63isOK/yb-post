@@ -176,3 +176,81 @@ send语句是利用接收操作符来完成的，操作符两段的channel和值
 - 所有类型的值都可以赋值给空白标识符
 - 无类型常量赋值给一个接口变量或空白标识符，这个常量会先隐式转换成指定类型
 - 无类型布尔常量赋值给一个接口便来嗯或空白标识符，这个常量会先隐式转换成bool类型
+
+## if语句
+
+if语句是用条件变量来控制分支的语句，条件变量的结果是一个布尔值。
+如果条件变量是true，if分支执行;条件变量是false，else分支执行。
+
+    IfStmt = "if" [ SimpleStmt ";" ] Expression Block
+             [ "else" ( IfStmt | Block ) ] .
+
+if语句中可以插入一个简单语句，执行完之后，再执行if语句。
+
+从ebnf中还可以看出 else分支中还可以嵌套if语句，或是直接是块
+
+## switch语句
+
+switch 提供了多个分支，用表达式或指定类型去和每个case做比较
+
+    SwitchStmt = ExprSwitchStmt | TypeSwitchStmt .
+
+从ebnf中可以看出switch有两种，一种是常用的switch语句，一种是switch type组合。
+一种是比较表达式和case的值，一种是比较类型。
+
+### 表达式 switch
+
+switch中的表达式和case的表达式(不一定要是常量)，计算顺序都是从左到右，从上到下。
+第一个匹配的case，会触发相应块的执行，其他case都会被跳过。
+如果没有case匹配，就会执行default分支。
+
+如果没有switch表达式，就默认是常量 true
+
+    ExprSwitchStmt = "switch" [ SimpleStmt ";" ] [ Expression ]
+                     "{" { ExprCaseClause } "}" .
+    ExprCaseClause = ExprSwitchCase ":" StatementList .
+    ExprSwitchCase = "case" ExpressionList | "default" .
+
+从ebnf上看，和c/c++的switch没什么区别(唯一区别是case后可跟多个表达式)
+
+如果switch表达式是无类型常量，会优先隐式转换成默认类型，
+如果是无类型布尔值，会优先隐式转换成bool类型。
+nil不能充当switch表达式。
+
+如果case表达式是无类型的，会优先隐式转换成switch表达式的类型。
+switch表达式和case表达式，她们的值要可以进行有效的比较的。
+
+switch表达式，如果是申明和初始化，可以理解为一个未显式指明类型的临时变量。
+
+在case和default中，非最后的分支，可能会是一个fallthrough语句，
+这个fallthrough语句的意思是从本分支的结尾处跳到下一个分支的开头，继续执行。
+此时是不用关系下个分支的比较结果。一般fallthrough出现在分支的最后面。
+
+switch前面也能插入简单语句。
+
+### type switch
+
+这个类型switch是一个新东西，用于比较类型，而不是比较值。
+
+新东西，写法很固定：
+
+    switch x.(type) {
+    // cases
+    }
+
+x是动态类型(接口类型)，case里是具体类型，且要实现x的接口类型。
+
+    TypeSwitchStmt  = "switch" [ SimpleStmt ";" ] TypeSwitchGuard
+                      "{" { TypeCaseClause } "}" .
+    TypeSwitchGuard = [ identifier ":=" ] PrimaryExpr "." "(" "type" ")" .
+    TypeCaseClause  = TypeSwitchCase ":" StatementList .
+    TypeSwitchCase  = "case" TypeList | "default" .
+    TypeList        = Type { "," Type } .
+
+从ebnf中可以看出，类型switch可能还包含一个短变量声明。
+如果有这个声明，那短变量的作用域就覆盖所有的分支。
+如果case后只有一个类型，短变量就是这个类型;否则，短变量的类型就从主要表达式而来。
+
+case分支，是可以出现nil的，匹配的情况是：接口变量是nil。最多只有一个nil。
+
+fallthrough语句不能出现在类型switch中。类型switch是可以转成if-else的。
