@@ -254,3 +254,90 @@ x是动态类型(接口类型)，case里是具体类型，且要实现x的接口
 case分支，是可以出现nil的，匹配的情况是：接口变量是nil。最多只有一个nil。
 
 fallthrough语句不能出现在类型switch中。类型switch是可以转成if-else的。
+
+## for语句
+
+for语句是循环语句，一个for由3部分组成：迭代因子(用于条件判断);for分支;range分支。
+
+    ForStmt = "for" [ Condition | ForClause | RangeClause ] Block .
+    Condition = Expression .
+
+### 单条件的for语句
+
+    for a < b {
+      a *= 2
+    }
+
+最简单的格式，只要条件不为false，就一直循环下去。
+每次迭代都会检查条件。条件是可以省略的，等同于true，此时就是无限循环
+
+### 普通for分支的for语句
+
+    for i := 0; i < 10; i++ {
+      f(i)
+    }
+
+会有一个初始化(前置语句，可以是赋值语句);一个后置语句(可以是自增自减)。
+前置的初始化语句可能是短变量赋值语句。后置语句不能是短变量赋值语句。
+
+    ForClause = [ InitStmt ] ";" [ Condition ] ";" [ PostStmt ] .
+    InitStmt = SimpleStmt .
+    PostStmt = SimpleStmt .
+
+for分支的情况，上面3个语句都可以省略，或省略部分，但分号不能省。
+除非退化成单条件for语句，这样分号就可以省略了。
+
+### range分支的for语句
+
+for range语句，只适用于迭代 array/slice/string/map/channel
+
+    RangeClause = [ ExpressionList "=" | IdentifierList ":=" ] "range"
+                  Expression .
+
+从ebnf中可以看出，=和:=都能用
+
+range后面的表达式称为range表达式，可以是数组/切片/字符串/map，
+或是数组指针，带接收操作符的channel变量(要有权限：方向要对)。
+
+和赋值一样，左操作数要能被寻址，或是map的索引表达式。
+如果range表达式是channel，每次最多迭代一个元素。
+如果迭代变量是空白标识符，就和没有标识符类似。
+
+range表达式在迭代开始时计算一次，后面都不计算了。只有一个例外：
+如果只有一个迭代变量，len(x)是个常数，则range表达式就不计算了。
+
+如果左操作数中包含函数调用，那每次迭代都会计算一次
+
+for range 的规则：
+
+- 数组/数组指针/切片
+  - 第一个返回值是索引，第二个是值
+- 字符串string
+  - 第一个返回值是索引，第二个是rune
+  - 如果是用for分支，就是按byte遍历
+
+    a := "天天蓝abc不是兰"
+    for x, y := range a {
+      fmt.Println(x, string(y))
+    }
+    Output:
+    0 天
+    3 天
+    6 蓝
+    9 a
+    10 b
+    11 c
+    12 不
+    15 是
+    18 兰
+
+- map
+  - 迭代的顺序不是固定(本来就不是顺序的，Go还特意加了随机处理)
+  - 第一个返回值是key，第二个是value
+- channel
+  - 如果channel是nil，就会永久阻塞
+  - 读会一直持续，直到channel被close
+
+等range表达式计算完之后，后面就是赋值语句。
+
+选择短变量声明或赋值语句，取决于变量是否在for外面声明。
