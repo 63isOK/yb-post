@@ -1014,3 +1014,65 @@ false表示信道已经被关闭，此时x会是元素的零值
 
 位异或操作符 ^ 还有些规则：对于无类型常量，如果带符号，用1来处理;
 不带符号的用-1来处理。
+
+## 计算的顺序
+
+在包级别，初始化的依赖关系，决定了变量声明中，单个初始化表达式的计算顺序。
+除此之外，表达式/赋值/返回语句/函数调用/方法调用/通信中操作数的计算，
+都是按文字从左到右依次计算。
+
+    y[f()], ok = g(h(), i()+x[j()], <-c), k()
+    这是一个赋值列表
+    赋值的右边都是两个函数
+    执行顺序依次是 f() h() i() j() <-c g() k() 最后赋值
+
+还是有些顺序是未指定的，此时会导致有歧义：
+
+    a := 1
+    f := func() int { a++; return a }
+    x := []int{a, f()}
+    // x may be [1, 2] or [2, 2]: 
+    //evaluation order between a and f() is not specified
+
+    m := map[int]int{a: 1, a: 2}  
+    // m may be {2: 1} or {2: 2}: 
+    // evaluation order between the two map assignments is not specified
+
+    n := map[int]int{a: f()}
+    // n may be {2: 3} or {3: 3}: 
+    // evaluation order between the key and the value is not specified
+
+在包级别，初始化的依赖关系决定了变量声明中表达式的计算顺序，和从左到右的规则，
+但并不是所有表达式都是这个顺序
+
+    var a, b, c = f() + v(), g(), sqr(u()) + v()
+
+    func f() int        { return c }
+    func g() int        { return a }
+    func sqr(x int) int { return x*x }
+
+    // functions u and v are independent of all other variables and functions
+    // 如果u和v是其他包的，执行顺序就是 u() v() f() v() g()
+
+()会改变计算顺序
+
+## 总结
+
+spec中零零散散说了很多，不过这节的主题是表达式，
+在操作符一节还是用ebnf来说明了，表达式分一元表达式和二元表达式
+
+一元表达式由一元操作符(可选)和主要表达式组合而成  
+二元表达式由二元操作符和两个表达式组合而成
+
+主要表达式可细分为：
+
+- 操作数
+- 类型转换
+- 方法表达式
+- 选择器表达式
+- 索引表达式
+- 切片表达式
+- 类型断言表达式
+- 参数表达式
+
+每一级都可以继续细分,具体可以查看上面的spec
