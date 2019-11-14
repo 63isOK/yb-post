@@ -960,3 +960,57 @@ false表示信道已经被关闭，此时x会是元素的零值
     []rune("")                 // []rune{}
 
     MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
+
+## 常量表达式
+
+常量表达式是指操作数都是常量，这样在编译期就可以确定值。
+
+好处当然是效率高。
+
+一般无类型的bool/数值/字符串常量，常作为常量表达式的操作数。
+
+常量的比较，会生成一个无类型的bool常量，
+如果位移表达式的左操作数是无类型常量，那表达式的结果就是整数常量;
+否则，结果就是常量，类型和左操作数的类型一致(范围还是一个整形eg：int32 int64等)
+
+对无类型常量的其他操作(非位移操作)，结果都是一个无类型的常量。
+如果二元操作符，遇到两个不同类型的无类型操作数，
+结果是整形/浮点/rune/复数。eg：无类型复数除以无类型整数，
+结果是无类型复数。
+
+    const a = 2 + 3.0          // a == 5.0   (untyped floating-point constant)
+    const b = 15 / 4           // b == 3     (untyped integer constant)
+    const c = 15 / 4.0         // c == 3.75  (untyped floating-point constant)
+    const Θ float64 = 3/2      // Θ == 1.0   (type float64, 3/2 is integer division)
+    const Π float64 = 3/2.     // Π == 1.5   (type float64, 3/2. is float division)
+    const d = 1 << 3.0         // d == 8     (untyped integer constant)
+    const e = 1.0 << 3         // e == 8     (untyped integer constant)
+    const f = int32(1) << 33   // illegal    (constant 8589934592 overflows int32)
+    const g = float64(2) >> 1  // illegal    
+                               // (float64(2) is a typed floating-point constant)
+                               // 因为位移操作需要的整形类型
+    const h = "foo" > "bar"    // h == true  (untyped boolean constant)
+    const j = true             // j == true  (untyped boolean constant)
+    const k = 'w' + 1          // k == 'x'   (untyped rune constant)
+    const l = "hi"             // l == "hi"  (untyped string constant)
+    const m = string(k)        // m == "x"   (type string)
+    const Σ = 1 - 0.707i       //            (untyped complex constant)
+    const Δ = Σ + 2.0e-4       //            (untyped complex constant)
+    const Φ = iota*1i - 1/1i   //            (untyped complex constant)
+
+内置函数complex可通过无类型参数生成一个无类型的复数
+
+常量表达式都是可以立马计算的，计算出的值或常量表达式的精度一般都很大，
+至少比内置类型的大。
+
+    const Huge = 1 << 100         // Huge == 1267650600228229401496703205376  
+                                  // (untyped integer constant)
+    const Four int8 = Huge >> 98  // Four == 4
+                                  // (type int8)
+
+除法的被除数就算是无类型常量或常量表达式，也要遵循"被除数不能是0"的规则
+
+带类型的常量，值一定要在类型的值范围内。
+
+位异或操作符 ^ 还有些规则：对于无类型常量，如果带符号，用1来处理;
+不带符号的用-1来处理。
