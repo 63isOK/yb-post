@@ -53,3 +53,40 @@ Go的术语是"结束语句"，也可以理解为终止语句，同一个块中�
 虽然Go提供了，但大多数场景都不会用到这个
 
 另外标签语句的标签虽然是标识符，但和变量标识符并不冲突
+
+## 表达式语句
+
+除了指定的内置函数，函数调用/方法调用/接收操作都可以在一个语句的上下文中出现，
+出现的时候可能会用()包裹
+
+    ExpressionStmt = Expression .
+
+下列内置函数是不能出现在语句的上下文中的：
+
+    append cap complex imag len make new real
+    unsafe.Alignof unsafe.Offsetof unsafe.Sizeof
+    复数的3个内置函数
+    make new
+    cap和len
+    unsafe的几个函数
+
+看看下面的例子：
+
+    h(x+y)
+    f.Close()
+    <-ch
+    (<-ch)
+    len("foo")  // illegal if len is the built-in function
+
+下面看看为啥cap len不能出现在语句的上下文中
+
+    i := []int{1,2,3}
+    len(i)
+    append(i, 4)
+    // 这就叫语句的上下文，
+    // len和append以表达式语句出现在块中，那就违反了规则
+    // 编译器会报错，说你计算了一个值，但没有使用，就认为是错的。这也合理
+
+    i = append(i, 5) 
+    // 这个为啥不出错
+    // 因为这个不是表达式语句 ，而是赋值语句, 没毛病
