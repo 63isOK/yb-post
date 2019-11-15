@@ -361,3 +361,69 @@ ebnf中，go后面跟的表达式必须是函数调用或方法调用，不能�
 
     go Server()
     go func(ch chan<- bool) { for { sleep(10); ch <- true }} (c)
+
+## select语句
+
+select语句，和其他语言一样，是多路复用的。
+select语句会选择一个可能的操作来执行，这些操作包括(send/receive).
+
+    SelectStmt = "select" "{" { CommClause } "}" .
+    CommClause = CommCase ":" StatementList .
+    CommCase   = "case" ( SendStmt | RecvStmt ) | "default" .
+    RecvStmt   = [ ExpressionList "=" | IdentifierList ":=" ] RecvExpr .
+    RecvExpr   = Expression .
+
+从ebnf上看，select和switch很类似，只是没有switch中的简单语句和switch表达式，
+且select中的case全是通讯操作。
+
+接收语句中，可以获取一个或两个返回值，可以用短变量声明语句。
+接收语句中，是需要存在接收操作符的，可以用()包裹。
+最多一个default语句，这个default可以出现在任何地方,这点和switch一样。
+
+select执行步骤：
+
+1. select的所有case中，接收操作的channel操作数，send语句中的channel和右表达式，
+在进入select语句时都是按源码中出现的次序，计算一次。
+结果是channel的集合(接收)，或是值集合(要发送的)。不管select最后执行的是哪个分支，
+这个计算的副作用都是存在的。接收语句中的赋值语句还没有执行
+2. 如果一个或多个通讯可以进行执行了，select会随机选择一个进行执行。
+如果没有通讯准备好，那就会执行default分支(如果有一个default分支的话)。
+如果没有default分支，又没有通讯准备好，select会阻塞，直到某个通讯准备好。
+3. 除了default分支，其他被选择的分支会执行相应的通讯操作
+4. 如果select选择的分支是一个接收语句，里面包含短变量声明或赋值语句，
+那表达式的左操作数会计算，并用接收操作的返回值来赋值
+5. select选择中的分支的语句块会被执行
+
+如果一个channel是nil，她是无发触发通讯操作的，
+所以如果selelct只有一个nil 信道分支,且没有defalut分支，那select会永久阻塞。
+
+    var a []int
+    var c, c1, c2, c3, c4 chan int
+    var i1, i2 int
+    select {
+    case i1 = <-c1:
+      print("received ", i1, " from c1\n")
+    case c2 <- i2:
+      print("sent ", i2, " to c2\n")
+    case i3, ok := (<-c3):  // same as: i3, ok := <-c3
+      if ok {
+        print("received ", i3, " from c3\n")
+      } else {
+        print("c3 is closed\n")
+      }
+    case a[f()] = <-c4:
+      // same as:
+      // case t := <-c4
+      //   a[f()] = t
+    default:
+      print("no communication\n")
+    }
+
+    for {  // send random sequence of bits to c
+      select {
+      case c <- 0:  // note: no statement, no fallthrough, no folding of cases
+      case c <- 1:
+      }
+    }
+
+    select {}  // block forever
