@@ -54,6 +54,13 @@
     - [类型和值的属性](/reviewed/go-spec-properties.md)
     - [代码块](/reviewed/go-spec-blocks.md)
     - [声明和作用域](/reviewed/go-spec-scope.md)
+    - [表达式](/reviewed/go-spec-expressions.md)
+    - [语句](/reviewed/go-spec-statements.md)
+    - [内置函数说明](/reviewed/go-spec-builtin.md)
+    - [包](/reviewed/go-spec-package.md)
+    - [程序的初始化和执行](/reviewed/go-spec-exec.md)
+    - [错误和运行时异常](/reviewed/go-spec-error.md)
+    - [系统注意事项](/reviewed/go-spec-system.md)
   - 内存模型
   - faq
     - [项目起源](/reviewed/faq/go-faq-origins.md)
