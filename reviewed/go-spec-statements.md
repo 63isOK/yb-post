@@ -535,3 +535,11 @@ goto语句和标签声明不在同一个块，会报错
       f()
       n--
     }
+
+## fallthrough语句
+
+    FallthroughStmt = "fallthrough" .
+
+指明当前分支结束后直接执行下一个分支的块代码，不管下个分支是否匹配。
+
+只能用在switch分支中，不能出现在最后一个分支
