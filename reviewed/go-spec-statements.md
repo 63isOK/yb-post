@@ -427,3 +427,53 @@ select执行步骤：
     }
 
     select {}  // block forever
+
+## return语句
+
+在函数中return语句表示结束函数的执行，可能还包含返回值，
+如果函数F中还包含延时函数，会在函数F返回调用者之前调用。
+
+    ReturnStmt = "return" [ ExpressionList ] .
+
+如果函数没有返回值列表，那return不能指明返回值
+
+带返回值的函数，返回有3种情况：
+
+- return 显示带返回值列表，此时每个表达式都是单值，且可赋值给对应的返回值类型。
+
+    func simpleF() int {
+      return 2
+    }
+
+    func complexF1() (re float64, im float64) {
+      return -7.0, -4.0
+    }
+
+- return 返回一个函数A调用，这个函数A有返回值列表，列表中最少有一个返回值，
+这样函数A返回的值会先存在临时变量中，临时变量的类型和函数F的返回值类型一致
+
+    func complexF2() (re float64, im float64) {
+      return complexF1()
+    }
+
+- return 空，此时函数F的返回值列表都是有名字的
+
+    func complexF3() (re float64, im float64) {
+      re = 7.0
+      im = 4.0
+      return
+    }
+
+    func (devnull) Write(p []byte) (n int, _ error) {
+      n = len(p)
+      return
+    }
+
+不同的实现可能不同,所以在开发时尽量避免以下情况：
+
+    func f(n int) (res int, err error) {
+      if _, err := f(n-1); err != nil {
+        return  // invalid return statement: err is shadowed
+      }
+      return
+    }
