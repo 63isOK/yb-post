@@ -543,3 +543,43 @@ goto语句和标签声明不在同一个块，会报错
 指明当前分支结束后直接执行下一个分支的块代码，不管下个分支是否匹配。
 
 只能用在switch分支中，不能出现在最后一个分支
+
+## defer语句
+
+延时语句，调用一个函数，这个函数的调用时机推迟到函数返回时。
+不管是正常的return返回，还是异常退出返回时。
+
+    DeferStmt = "defer" Expression .
+
+这个表达式必须是函数或方法调用，不能用()包裹(和go语句类似)。
+内置函数的限制和go语句类似(也和表达式语句类似)。
+
+每次defer函数执行时，她的函数值和参数和普通函数一样进行计算，
+只是没有正真调用执行，而是在外部函数返回时执行。
+
+如果有多个延时函数，执行顺序按filo的方式(栈式)
+
+更加准确的描述延时函数调用时机：函数返回时，设置完返回值后，
+在将控制权交个上一层的调用着之前，执行延时函数。
+
+如果延时函数为nil，会在执行延时语句时报异常，而不是在执行延时函数时报。
+
+延时函数如果是函数字面量(延时语句的表达式不是一个函数标识符)，
+那在函数体里是可以修改父函数作用域里的值的
+
+    lock(l)
+    defer unlock(l)  // unlocking happens before surrounding function returns
+
+    // prints 3 2 1 0 before surrounding function returns
+    for i := 0; i <= 3; i++ {
+      defer fmt.Print(i)
+    }
+
+    // f returns 42
+    func f() (result int) {
+      defer func() {
+        // result is accessed after it was set to 6 by the return statement
+        result *= 7
+      }()
+      return 6
+    }
