@@ -55,8 +55,9 @@
     - [代码块](/reviewed/go-spec-blocks.md)
     - [声明和作用域](/reviewed/go-spec-scope.md)
     - [表达式](/reviewed/go-spec-expressions.md)
-    - [表达式](/reviewed/go-spec-statements.md)
-    - [表达式](/reviewed/go-spec-builtin.md)
+    - [语句](/reviewed/go-spec-statements.md)
+    - [内置函数说明](/reviewed/go-spec-builtin.md)
+    - [包](/reviewed/go-spec-package.md)
   - 内存模型
   - faq
     - [项目起源](/reviewed/faq/go-faq-origins.md)
