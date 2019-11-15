@@ -477,3 +477,36 @@ select执行步骤：
       }
       return
     }
+
+## break语句
+
+在for/switch/select语句中结束执行
+
+    BreakStmt = "break" [ Label ] .
+
+可以和标签语句配合，指明下一步执行点
+
+带标签，break语句必须是在封闭的for/switch/select语句中。
+标签指明了跳出哪一层for/switch/select.
+
+    OuterLoop:
+      for i = 0; i < n; i++ {
+        for j = 0; j < m; j++ {
+          switch a[i][j] {
+          case nil:
+            state = Error
+            break OuterLoop
+          case item:
+            state = Found
+            break OuterLoop
+          }
+        }
+      }
+
+## continue语句
+
+在for语句中，continue会跳到最近一次迭代去执行(直接跳到for循环的后置表达式)。
+
+    ContinueStmt = "continue" [ Label ] .
+
+也支持标签。标签指明了跳到哪层for去执行后置表达式。
