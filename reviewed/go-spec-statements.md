@@ -510,3 +510,28 @@ select执行步骤：
     ContinueStmt = "continue" [ Label ] .
 
 也支持标签。标签指明了跳到哪层for去执行后置表达式。
+
+## goto语句
+
+goto语句会将执行的控制权交给同一个函数中的其他语句
+
+    GotoStmt = "goto" Label .
+
+goto的后面不能有变量声明，必须是先确定所有人的作用域，再使用goto
+
+      goto L  // BAD, 跳过了v变量的声明，会导致错误
+      v := 3
+    L:
+
+goto语句和标签声明不在同一个块，会报错
+
+    if n%2 == 1 {
+      goto L1  // 错误，goto语句和标签语句不在同一个块
+    }
+    for n > 0 {
+      f()
+      n--
+    L1:
+      f()
+      n--
+    }
