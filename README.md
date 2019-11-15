@@ -59,6 +59,7 @@
     - [内置函数说明](/reviewed/go-spec-builtin.md)
     - [包](/reviewed/go-spec-package.md)
     - [程序的初始化和执行](/reviewed/go-spec-exec.md)
+    - [错误和运行时异常](/reviewed/go-spec-error.md)
   - 内存模型
   - faq
     - [项目起源](/reviewed/faq/go-faq-origins.md)
