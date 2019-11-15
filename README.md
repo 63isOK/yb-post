@@ -62,6 +62,7 @@
     - [错误和运行时异常](/reviewed/go-spec-error.md)
     - [系统注意事项](/reviewed/go-spec-system.md)
   - 内存模型
+    - [内存模型](/reviewed/go-memory-model.md)
   - faq
     - [项目起源](/reviewed/faq/go-faq-origins.md)
     - [使用情况](/reviewed/faq/go-faq-usage.md)
