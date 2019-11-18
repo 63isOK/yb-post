@@ -103,6 +103,7 @@
 - 多路复用[了解](/reviewed/multiplexing.md),
 [事件循环](/reviewed/event-loop.md),
 i/o多路复用[select/pselect/poll/epoll](/reviewed/multiplexing-network.md)
+- uber[Go编码规范](/reviewed/go-uber.md)
 
 ## waiting for review
 
