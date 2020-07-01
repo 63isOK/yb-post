@@ -15,9 +15,7 @@
 - kurento, 一个开源的sfu 项目，主要承载的是webrtc流
   - [二次开发需要了解的faq](/reviewed/kurento-faq.md)
   - ppt等演讲资料(包括技术选型的一个分析，源码分析)
-  - openvidu(kurento的姐妹项目)的
-[入门教程](/reviewed/kurento-openvidu-office-doc-tutorials.md)、
-[demo](/reviewed/kurento-openvidu-office-doc-demo.md)
+  - openvidu(kurento的姐妹项目)的[入门教程](/reviewed/kurento-openvidu-office-doc-tutorials.md)、[demo](/reviewed/kurento-openvidu-office-doc-demo.md)
 - [redis学习笔记](/reviewed/redis-office-doc.md)
 - c++相关资料
   - [cpp基础](/reviewed/cpp-basic.md)
@@ -35,8 +33,7 @@
   - [faq](/reviewed/grpc-faq.md)
 - go 官方文档
   - 官方文档,对go的一个大致描述
-    - [介绍](/reviewed/go-introduce.md),
-[安装](/reviewed/go-install.md)
+    - [介绍](/reviewed/go-introduce.md),[安装](/reviewed/go-install.md)
     - [基础教程](/reviewed/go-tour.md)
     - [如何写go代码](/reviewed/go-code.md)
     - [effective go](/reviewed/go-effective.md)
@@ -78,31 +75,24 @@
     - [实现](/reviewed/faq/go-faq-impl.md)
     - [性能](/reviewed/faq/go-faq-performance.md)
     - [和c的不同](/reviewed/faq/go-faq-c.md)
-- go发布历史:
-[v1.12](/reviewed/go-history-v1.12.md),
-[v1.13](/reviewed/go-history-v1.13.md)
+- go发布历史:[v1.12](/reviewed/go-history-v1.12.md),[v1.13](/reviewed/go-history-v1.13.md)
 - go [标准库](/reviewed/go-pkg.md)
-- 树,[二叉树](/reviewed/binary-tree.md)
-[二叉搜索树](/reviewed/binary-search-tree.md)
-- 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),
-[缓存替换策略](/reviewed/cache-replacement-policies.md)
+- 树,[二叉树](/reviewed/binary-tree.md)[二叉搜索树](/reviewed/binary-search-tree.md)
+- 页面置换算法[了解](/reviewed/page-replacement-algorithm.md),[缓存替换策略](/reviewed/cache-replacement-policies.md)
 - 使用github，git commit怎么写[才高效](/reviewed/github-commit.md)
 - github issues的[基本使用](/reviewed/github-issue.md)
 - github codeowners的[基本使用](/reviewed/github-codeowners.md)
 - test
   - BDD 行为驱动测试，常用在用户验收测试(UAT)。BDD概念的[补充](/reviewed/test-bdd.md)
   - GoConvey,一个BDD测试框架
-    - GoConvey的[介绍](/reviewed/goconvey-introduce.md),
-第一次试用感觉真心好，不愧是chrome都集成的开源库
+    - GoConvey的[介绍](/reviewed/goconvey-introduce.md),第一次试用感觉真心好，不愧是chrome都集成的开源库
     - GoConvey[测试的编写](/reviewed/goconvey-composition.md)
     - [断言](/reviewed/goconvey-assert.md)
     - [执行顺序和忽略](/reviewed/goconvey-exec.md)
     - [配置](/reviewed/goconvey-profile.md)
     - [faq](/reviewed/goconvey-faq.md)
     - [reset](/reviewed/goconvey-reset.md)
-- 多路复用[了解](/reviewed/multiplexing.md),
-[事件循环](/reviewed/event-loop.md),
-i/o多路复用[select/pselect/poll/epoll](/reviewed/multiplexing-network.md)
+- 多路复用[了解](/reviewed/multiplexing.md),[事件循环](/reviewed/event-loop.md),i/o多路复用[select/pselect/poll/epoll](/reviewed/multiplexing-network.md)
 - uber[Go编码规范](/reviewed/go-uber.md)
 - Dave Cheney 系列
   - [self-referential functions and the design of option](/reviewed/function-options-hello.md)
