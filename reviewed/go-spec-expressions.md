@@ -5,7 +5,8 @@
 ## 操作数
 
 表达式中的基本值叫做操作数。
-操作数可能是一个文字，非空标识是常量/变量/函数/带参表达式
+操作数可能是一个文字，可能是非空标识是常量/变量/函数/带括号表达式,
+而且还可能是其他包的,eg: mylib.Abc
 
 空标识符在赋值语句的左边时，可以认为是一个操作数
 
@@ -40,13 +41,13 @@
 - 所以所操作数的种类就这些，接下来就是利用操作符将这些操作数组合成表达式
 - 看了下面3节的内容的，直接跳到主要表达式即可
 
-## 合格的标识符
+## 包级标识符
 
-合格的标识符是有包名前传的标识符。包名和标识符都是非空的
+包级标识符是有包名前缀的标识符。包名和标识符都是非空的
 
     QualifiedIdent = PackageName "." identifier .
 
-要在其他包中访问这个合格的标识符，那么这个标识符必须导出。
+要在其他包中访问这个包级标识符，那么这个标识符必须导出。
 
 也就是说标识符必须在包块中声明，并导出。
 
@@ -208,8 +209,7 @@ slice/map的零值是nil，slice/map初始化但没有元素，她不是nil。
 
 分析：
 
-- Go中主要的表达式有操作数/方法表达式/选择器表达式/索引表达式/
-切片表达式/类型断言表达式/参数表达式/转换(这个后面再提)
+- Go中主要的表达式有操作数/方法表达式/选择器表达式/索引表达式/切片表达式/类型断言表达式/参数表达式/转换(这个后面再提)
 - 这上面的表达式主要是Go定义的，表达式中除了这块，还有跟操作符相关的表达式
 
 ## Selectors 选择器
@@ -228,12 +228,9 @@ f的深度指找到f，所经历嵌套的层数。T中的字段和方法，她�
 
 选择器还有以下规则：
 
-1. T不是指针或接口，T或\*T类型的值x，x.f表示最小深度的字段或方法,
-如果同一深度，有两个f，那选择器表达式就是非法的
-2. T是接口，x是T的值，x.f表示动态值x的实际类型的f方法，
-如果T的方法集中没有叫f的，那选择器语句就是非法的
-3. 一个例外(这个是Go语言中的一个简写)，x是指针，(\*x.f)是正常的，
-此时f是一个字段，而不是一个方法，`此时x.f是(\*x.f)的简写`
+1. T不是指针或接口，T或\*T类型的值x，x.f表示最小深度的字段或方法,如果同一深度，有两个f，那选择器表达式就是非法的
+2. T是接口，x是T的值，x.f表示动态值x的实际类型的f方法，如果T的方法集中没有叫f的，那选择器语句就是非法的
+3. 一个例外(这个是Go语言中的一个简写)，x是指针，(\*x.f)是正常的，此时f是一个字段，而不是一个方法，`此时x.f是(\*x.f)的简写`
 4. 其他任何情况，x.f都是非法的
 5. x是接口类型，值是nil，调用x.f会引发一个运行时异常
 
@@ -443,7 +440,7 @@ t.M(arg) 都可以用新的函数来表示:
       return T{}
     }
 
-    fv2 := makeT().Mv 
+    fv2 := makeT().Mv
     fp2 := makeT().Mp   // cannot take the address of makeT()
     fv2(3)
     fp2(3.2)
@@ -472,7 +469,7 @@ x是一个指针，x.Mv会自动转换成(\*x).Mv, `这是选择器表达式的�
 
 索引表达式是主要表达式的一种。
 
-索引一般用于数组/数组指针/切片/string/map，a[x]中的x要么是索引要么是map的key。
+索引一般用于数组/数组指针/切片/string/map，`a[x]`中的x要么是索引要么是map的key。
 
 索引有以下规则
 
@@ -484,7 +481,7 @@ x是一个指针，x.Mv会自动转换成(\*x).Mv, `这是选择器表达式的�
 - array
   - 常量索引必须在范围内
   - 如果x超出范围，会在运行时报异常
-  - a[x]表示索引x处的元素，元素类型就是数组指定的类型
+  - `a[x]`表示索引x处的元素，元素类型就是数组指定的类型
 - 数组指针
 
       a[x] 是(*a)[x]的简写
@@ -492,7 +489,7 @@ x是一个指针，x.Mv会自动转换成(\*x).Mv, `这是选择器表达式的�
 
 - 切片
   - x超出返回，会报运行时异常
-  - a[x]表示索引x处的元素，元素类型就是切片指定的类型
+  - `a[x]`表示索引x处的元素，元素类型就是切片指定的类型
 - string
   - 如果字符串是一个常量，那么索引也是一个在范围内的常量
   - x超出返回，会报运行时异常
@@ -520,7 +517,7 @@ x是一个指针，x.Mv会自动转换成(\*x).Mv, `这是选择器表达式的�
 
 ### 简单切片表达式
 
-    a[low:high] 
+    a[low:high]
 
 这种写法会构造出一个新的子串或切片，游标指明的是一个半开区间[low:high),
 生成的新对象长度是high - low。
@@ -575,7 +572,7 @@ x是接口类型，T是具体类型，这就是类型断言。
     type I interface { m() }
 
     func f(y I) {
-      s := y.(string)    // illegal: 
+      s := y.(string)    // illegal:
                          // string does not implement I (missing method m)
                          // string没有实现I接口，所以会出错
       r := y.(io.Reader) // r has type io.Reader and the dynamic type of y
@@ -643,7 +640,7 @@ x是接口类型，T是具体类型，这就是类型断言。
     func Greeting(prefix string, who ...string)
     Greeting("nobody")  
                         // who 是nil
-    Greeting("hello:", "Joe", "Anna", "Eileen") 
+    Greeting("hello:", "Joe", "Anna", "Eileen")
                         // who是[]string{"Joe", "Anna", "Eileen"}
 
 调用一个可变参函数或方法时，是这样的, 变量后跟...
@@ -783,12 +780,9 @@ x是接口类型，T是具体类型，这就是类型断言。
 - 指针可以比较，指向同一个变量或都为nil。指向不同的零值结果可能相等可能不相等
 - chanel可以比较，信道值都指向同一个make出来的信道，或都为nil，叫相等
 - 接口值可以比较，都为nil，或她们的动态类型或值都相同，叫相等
-- 非接口类型的x，和接口类型可以比较，只要x的类型实现了接口，
-如果接口值的动态类型是具体类型，且值也是一样的，叫相等
-- 结构体可以比较，只要每个字段都是可比较的。只要两个结构体的非空字段是相等的，
-那这两个结构体就是相等的
-- 数组是可以比较的，只要她们的元素类型是可比较的，只要两个数组的元素是一样的，
-就是相等
+- 非接口类型的x，和接口类型可以比较，只要x的类型实现了接口，如果接口值的动态类型是具体类型，且值也是一样的，叫相等
+- 结构体可以比较，只要每个字段都是可比较的。只要两个结构体的非空字段是相等的，那这两个结构体就是相等的
+- 数组是可以比较的，只要她们的元素类型是可比较的，只要两个数组的元素是一样的，就是相等
 
 两接口比较，如果值是无法比较的，那么会报运行时异常，除了直接比较两个接口，
 还会出现在接口数组，或包含接口的结构体。
@@ -891,7 +885,7 @@ false表示信道已经被关闭，此时x会是元素的零值
     string(0x266c)           // "♬" of type string
     MyString("foo" + "bar")  // "foobar" of type MyString
     string([]byte{'a'})      // not a constant: []byte{'a'} is not a constant
-    (*int)(nil)              // not a constant: nil is not a constant, 
+    (*int)(nil)              // not a constant: nil is not a constant,
                              // *int is not a boolean, numeric, or string type
     int(1.2)                 // illegal: 1.2 cannot be represented as an int
     string(65.0)             // illegal: 65.0 is not an integer constant
@@ -920,8 +914,7 @@ false表示信道已经被关闭，此时x会是元素的零值
 
 字符串类型string的转换：
 
-- 有符号整数或无符号整数转string，会转换成对应的utf-8的字符串，
-超出的转成"\uFFFD"
+- 有符号整数或无符号整数转string，会转换成对应的utf-8的字符串，超出的转成"\uFFFD"
 
     string('a')       // "a"
     string(-1)        // "\ufffd" == "\xef\xbf\xbd"
@@ -929,7 +922,7 @@ false表示信道已经被关闭，此时x会是元素的零值
     type MyString string
     MyString(0x65e5)  // "\u65e5" == "日" == "\xe6\x97\xa5"
 
-- []byte转string，按顺序将元素排列，就是字符串
+- `[]byte转string`，按顺序将元素排列，就是字符串
 
     string([]byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'})   // "hellø"
     string([]byte{})                                     // ""
@@ -986,7 +979,7 @@ false表示信道已经被关闭，此时x会是元素的零值
     const d = 1 << 3.0         // d == 8     (untyped integer constant)
     const e = 1.0 << 3         // e == 8     (untyped integer constant)
     const f = int32(1) << 33   // illegal    (constant 8589934592 overflows int32)
-    const g = float64(2) >> 1  // illegal    
+    const g = float64(2) >> 1  // illegal
                                // (float64(2) is a typed floating-point constant)
                                // 因为位移操作需要的整形类型
     const h = "foo" > "bar"    // h == true  (untyped boolean constant)
@@ -1031,15 +1024,15 @@ false表示信道已经被关闭，此时x会是元素的零值
     a := 1
     f := func() int { a++; return a }
     x := []int{a, f()}
-    // x may be [1, 2] or [2, 2]: 
+    // x may be [1, 2] or [2, 2]:
     //evaluation order between a and f() is not specified
 
     m := map[int]int{a: 1, a: 2}  
-    // m may be {2: 1} or {2: 2}: 
+    // m may be {2: 1} or {2: 2}:
     // evaluation order between the two map assignments is not specified
 
     n := map[int]int{a: f()}
-    // n may be {2: 3} or {3: 3}: 
+    // n may be {2: 3} or {3: 3}:
     // evaluation order between the key and the value is not specified
 
 在包级别，初始化的依赖关系决定了变量声明中表达式的计算顺序，和从左到右的规则，
