@@ -184,4 +184,21 @@ yammer/linkedin/twitter都开始选择避免scala.
 
 少出问题,复杂类型系统容易出问题还是简单的容易出问题.
 
+## 15年工程师的选择
+
+15年做过了java/c++/obj-c.近两年转go:
+
+- 开发快
+  - 易学,编译快
+  - 标准库灵活
+- 依赖管理
+  - 静态链接,单执行
+  - 跨平台
+  - 现在也有了module
+- go fmt
+  - review很开心
+- 并发不是并行
+- 内置测试框架
+- 文档支持 go doc
+
 [kiss]: https://www.cnblogs.com/albertwang/archive/2013/09/29/3346000.html
