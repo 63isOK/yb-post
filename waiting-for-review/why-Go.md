@@ -201,4 +201,9 @@ yammer/linkedin/twitter都开始选择避免scala.
 - 内置测试框架
 - 文档支持 go doc
 
+## 新学3门语言
+
+js/c#/go, 不同类型的语言会带来不同的思考方式.
+没有一个语言是万灵丹.
+
 [kiss]: https://www.cnblogs.com/albertwang/archive/2013/09/29/3346000.html
