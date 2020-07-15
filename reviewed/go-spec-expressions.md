@@ -767,22 +767,30 @@ x是接口类型，T是具体类型，这就是类型断言。
 
     &    bitwise AND            integers
     |    bitwise OR             integers
-    ^    bitwise XOR            integers
-    &^   bit clear (AND NOT)    integers
+    ^    bitwise XOR            integers,非
+    &^   bit clear (AND NOT)    integers,异或(不同为1,相同为0)
 
     <<   left shift             integer << unsigned integer
     >>   right shift            integer >> unsigned integer
 
-除可能会发生截断
-
-可能会发生整数溢出 overflow
-
-整数溢出会导致报运行时异常
+- 除可能会发生截断
+- 可能会发生整数溢出 overflow
+- 整数溢出会导致报运行时异常
+- 优化:除法有时用位移实现,取余用位操作实现
+- 位移操作的右操作数不能为负,不然会导致运行时异常
+- 加/减/按位非 这类一元操作符都是对应二元的一个简写
 
 字符串可以使用 "+" "+="
 
     s := "hi" + string(c)
     s += " and good bye"
+
+溢出,是超过类型范围限定的情况,此时会发生数据丢失,
+有些溢出是合理的,有些是不符合预期的,所以需要仔细对待,
+溢出不会导致运行时异常.
+
+如果不在意溢出,`x<x+1`,是不是永远成立?
+那在计算机执行时,会不会一直成立呢?显然不会.这才是需要注意的地方.
 
 ## 比较操作符
 
