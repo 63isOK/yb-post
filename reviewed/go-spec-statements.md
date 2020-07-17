@@ -221,7 +221,8 @@ switch中的表达式和case的表达式(不一定要是常量)，计算顺序�
 第一个匹配的case，会触发相应块的执行，其他case都会被跳过。
 如果没有case匹配，就会执行default分支。
 
-如果没有switch表达式，就默认是常量 true
+如果没有switch表达式，就默认是常量 true,
+也就是说用true和各个case来做比较.
 
     ExprSwitchStmt = "switch" [ SimpleStmt ";" ] [ Expression ]
                      "{" { ExprCaseClause } "}" .
@@ -237,13 +238,18 @@ nil不能充当switch表达式。
 如果case表达式是无类型的，会优先隐式转换成switch表达式的类型。
 switch表达式和case表达式，她们的值要可以进行有效的比较的。
 
-switch表达式，如果是申明和初始化，可以理解为一个未显式指明类型的临时变量。
+switch表达式，如果是申明和初始化一个未显式指明类型的临时变量
+那么可以理解为将这个变量和各个case表达式进行==测试。
 
-在case和default中，非最后的分支，可能会是一个fallthrough语句，
+在case和default中，最后的可能会是一个fallthrough语句，
 这个fallthrough语句的意思是从本分支的结尾处跳到下一个分支的开头，继续执行。
+如果没有下一个分支,就结束switch语句.
 此时是不用关系下个分支的比较结果。一般fallthrough出现在分支的最后面。
 
 switch前面也能插入简单语句。
+
+当然switch中也不应该存在两个case值一样的情况,这是一个逻辑错误,
+当前编译器禁止出现一样的整数/浮点/字符串.
 
 ### type switch
 
@@ -256,6 +262,7 @@ switch前面也能插入简单语句。
     }
 
 x是动态类型(接口类型)，case里是具体类型，且要实现x的接口类型。
+case也能是接口类型,不过属于比较特殊的那种.
 
     TypeSwitchStmt  = "switch" [ SimpleStmt ";" ] TypeSwitchGuard
                       "{" { TypeCaseClause } "}" .
@@ -266,11 +273,13 @@ x是动态类型(接口类型)，case里是具体类型，且要实现x的接口
 
 从ebnf中可以看出，类型switch可能还包含一个短变量声明。
 如果有这个声明，那短变量的作用域就覆盖所有的分支。
-如果case后只有一个类型，短变量就是这个类型;否则，短变量的类型就从主要表达式而来。
+其效果类似于,在每个分支都声明了这个变量.
 
 case分支，是可以出现nil的，匹配的情况是：接口变量是nil。最多只有一个nil。
+如果是表达式switch,就不能再case中出现nil.
 
 fallthrough语句不能出现在类型switch中。类型switch是可以转成if-else的。
+对应的类型比较,就需要用到类型断言的方式.
 
 ## for语句
 
