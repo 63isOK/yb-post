@@ -91,7 +91,7 @@ Go中的break/continue也能跟标签,常用于跳出多重嵌套
     // len和append以表达式语句出现在块中，那就违反了规则
     // 编译器会报错，说你计算了一个值，但没有使用，就认为是错的。这也合理
 
-    i = append(i, 5) 
+    i = append(i, 5)
     // 这个为啥不出错
     // 因为这个不是表达式语句 ，而是赋值语句, 没毛病
 
@@ -99,7 +99,8 @@ Go中的break/continue也能跟标签,常用于跳出多重嵌套
 
 ## send语句
 
-send语句执行的是接收操作。就是在channel中发送一个值
+send语句就是在channel中发送一个值.
+前提有三个:信道/方向/值和信道元素类型的匹配.
 
     SendStmt = Channel "<-" Expression .
     Channel  = Expression .
