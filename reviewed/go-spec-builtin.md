@@ -91,6 +91,7 @@ len(数组/数组指针)，cap(数组/数组指针)都是常量。
 
 new(), 运行时声明一个变量，返回指针，按零值初始化
 
+这个特别适合申请结构体.
 不适用于slice/map/channel
 
 ## slice/map/channel的申请
