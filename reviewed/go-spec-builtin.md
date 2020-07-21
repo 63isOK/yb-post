@@ -1,11 +1,20 @@
 # 内置函数
 
 这些内置函数都是预先声明的。
+从调用方式上看,和普通函数没什么区别.
+有些内置函数,第一个参数是可接受类型,而不是值.
 
 这些内置函数并没有标准的Go类型，她们只能出现在调用表达式中。
-不能作为函数值。
+不能作为函数值。怎么理解?
 
-## 关闭发送信道
+    // 这么用可以,因为是调用表达式
+    close(xxx)
+    // 这么用不可以,因为内置函数不能作为函数值
+    a := close
+
+## 关闭信道
+
+关闭channle,是指不能再发,收是可以的.
 
     func close(c chan<- Type)
 
@@ -17,6 +26,7 @@
 - 利用多值接收操作，可判断一个信道是否已关闭
 
 接收操作，只要能从信道内接收到值，就不会认为信道是关闭的。
+直到接受到一个零值.当然也可以通过多返回值来判断信道是否关闭.
 
     func test7() {
       c := make(chan int, 10)
@@ -44,7 +54,7 @@
 
 ## 长度和容量
 
-长度：
+长度len()：
 
 - string，字符串中的字节数
 - 数组/数组指针，数组长度
@@ -52,15 +62,19 @@
 - map, key的个数
 - 信道，缓冲信道中元素个数
 
-容量：
+容量cap()：
 
 - 数组/数组指针，数组长度
 - 切片， 切片容量(要计算底层数组超过切片的部分)
 - 信道，缓冲信道的容量
 
+cap并没有对map进行描述,也没有对string进行描述,
+所以对于map/string,cap()是非法的.
+
 len(string)是常量。
 len(数组/数组指针)，cap(数组/数组指针)都是常量。
-len和cap的参数不能包含接收操作，不能包含非常量的函数调用。
+如果参数中不包含函数调用(或带接收者的方法调用),len/cap返回常量,
+此时参数是不会被计算的;否则参数先计算,且len/cap的返回值不是常量.
 
     const (
       c1 = imag(2i)                    // imag(2i) = 2.0 is a constant
@@ -68,7 +82,7 @@ len和cap的参数不能包含接收操作，不能包含非常量的函数调�
       c3 = len([10]float64{c1})        // [10]float64{c1} contains no function calls
       c4 = len([10]float64{imag(2i)})  
                       // imag(2i) is a constant and no function call is issued
-      c5 = len([10]float64{imag(z)})   
+      c5 = len([10]float64{imag(z)})
                       // invalid: imag(z) is a (non-constant) function call
     )
     var z complex128
@@ -77,37 +91,75 @@ len和cap的参数不能包含接收操作，不能包含非常量的函数调�
 
 new(), 运行时声明一个变量，返回指针，按零值初始化
 
+这个特别适合申请结构体.
 不适用于slice/map/channel
 
 ## slice/map/channel的申请
 
-make，申请之后，还会初始化为零值
+make，申请之后，还会初始化为零值,
+make只服务于slice/map/channel,类型后面可以有可选参数,
+返回值是T,不是\*T.
+
+Call| Type T   |  Result
+---|---|---
+make(T, n)      | slice    |  slice,长度和容量都是n
+make(T, n, m)   | slice    |  slice,长度n,容量m
+make(T)         | map      |  map
+make(T, n)      | map      |  map,申请了大约n个元素的内存
+make(T)         | channel  |  channel,无缓冲
+make(T, n)      | channel  |  缓冲channel,最大元素个数n
+
+m/n非负,且m要大于n,不然就是运行时异常.
+对于map的设置长度,spec虽然规定了,具体还是看实现咋做的.
 
 ## 切片的追加和拷贝
+
+追加和拷贝时slice的基本操作.
 
     append(s S, x ...T) S  // T is the element type of S
 
 追加是支持可变参。
+append是可以接受第二个参数是切片,
+只要第二个参数后面带上三个点.
+这里面有个特殊情况:第一个参数是`[]byte`,第二个参数是string...
+
+append()可能会导致新的slice产生
 
     copy(dst, src []T) int
 
 拷贝就是将源切片的元素复制到目的切片，返回复制元素的个数。
 
-复制元素的个数不能超过src/dst的最小容量
+复制元素的个数是min(len(src), len(dst)),
 
+和append一样,copy也有一个特殊情况:  
+dst是`[]byte`,src却是一个string.
+
+    // 将string的byte拷贝到字符切片
     copy(dst []byte, src string) int
-
-拷贝还支持字符串
 
 ## map元素的删除
 
+delete为map服务.
+
     delete(map,key)
 
-删除map中的map[key]，如果map中不存在指定的key或map为nil，则delete不执行任何操作。
+删除`map[key]`，如果map中不存在指定的key或map为nil，则delete不执行任何操作。
 
 ## 复数
 
-`因为暂时不会用到复数，所有不分析`
+有3个内置函数服务于复数.
+
+- complex(), 构造复数
+- real/imag, 获取复数的实部/虚部
+
+复数的实部虚部是浮点型,而且两个的浮点类型要是一致的,
+不能一个是float32,另一个是float64.  
+这样复数的类型就有complex64/complex128,分别对应32/64的浮点参数.
+如果其中一个是无类型常量,那么就要转换成另一个参数对应的类型.
+如果两个参数都是无类型常量,或者虚部为0,
+那么组合成的复数就是无类型复数.
+
+real/imag返回的类型和复数具体类型对应.
 
 ## 异常处理
 
@@ -117,8 +169,8 @@ panic()/recover() 用于协助报告和处理运行时异常/程序自定义错�
     func recover() interface{}
 
 在函数f中，显示调用panic或运行时异常，都会导致函数f结束执行，
-之后就是执行延时函数。然后报告给上层调用者，依次走到协程的最顶层，
-之后程序结束，报告错误，这个过程被称为panicking。
+之后就是执行延时函数。然后报告给上层调用者(也会调用其中的defer函数)，
+依次走到协程的最顶层，之后程序结束，报告错误，这个过程被称为panicking。
 
     panic(42)
     panic("unreachable")
@@ -126,11 +178,17 @@ panic()/recover() 用于协助报告和处理运行时异常/程序自定义错�
 
 recover函数允许程序接管协程的panicking行为。
 
-A函数有个延时函数B，A出现异常，B调用了recover来接管panicking行为。
-B中recover的返回值是interface{},这个返回值会传给panic的调用者A。
-如果返回值是正常的(没有新建一个panic)，那panicking序列会停止。
-此时从A到异常出现之间产生的状态都会被丢弃，然后重新执行。
+A函数有个延时函数B(B里调用了recover函数)，执行A函数的协程中出现异常，
+只要执行走到了B函数,B会调用recover来接管panicking行为。
+B函数的返回值会以值得方式传递给调用panic的调用者.
+如果B是正常返回,没有出现新的panic,则panicking序列会停止.
+B中recover的返回值是interface{},这个返回值就是panic的调用参数。
+如果recover返回值是正常的(没有新建一个panic)，那panicking序列会停止。
+此时从异常出现到A的剩下部分产生的状态都会被丢弃，
+说白了就是recover之后,调用完B之前的derfer函数,这是正常执行。
 延时函数B后面要执行的其他延时函数会执行，之后返回A的调用者。
+
+所以所有一截是丢弃掉了的,就是异常到A的剩下代码段.
 
 以下几种情况，recover的返回值是nil：
 
@@ -171,4 +229,8 @@ B中recover的返回值是interface{},这个返回值会传给panic的调用者A
 
 ## 自举 bootstrapping
 
-不关心
+为了完整性,有些内置函数很有用,但并不一定保证不会被丢弃.
+
+print/println,这两个函数在自举时用到了,没有返回值.
+
+如果我们要打印,还是使用fmt库好.
