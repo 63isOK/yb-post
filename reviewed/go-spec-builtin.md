@@ -96,7 +96,21 @@ new(), 运行时声明一个变量，返回指针，按零值初始化
 
 ## slice/map/channel的申请
 
-make，申请之后，还会初始化为零值
+make，申请之后，还会初始化为零值,
+make只服务于slice/map/channel,类型后面可以有可选参数,
+返回值是T,不是\*T.
+
+Call| Type T   |  Result
+---|---|---
+make(T, n)      | slice    |  slice,长度和容量都是n
+make(T, n, m)   | slice    |  slice,长度n,容量m
+make(T)         | map      |  map
+make(T, n)      | map      |  map,申请了大约n个元素的内存
+make(T)         | channel  |  channel,无缓冲
+make(T, n)      | channel  |  缓冲channel,最大元素个数n
+
+m/n非负,且m要大于n,不然就是运行时异常.
+对于map的设置长度,spec虽然规定了,具体还是看实现咋做的.
 
 ## 切片的追加和拷贝
 
