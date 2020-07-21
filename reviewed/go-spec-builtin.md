@@ -114,19 +114,28 @@ m/n非负,且m要大于n,不然就是运行时异常.
 
 ## 切片的追加和拷贝
 
+追加和拷贝时slice的基本操作.
+
     append(s S, x ...T) S  // T is the element type of S
 
 追加是支持可变参。
+append是可以接受第二个参数是切片,
+只要第二个参数后面带上三个点.
+这里面有个特殊情况:第一个参数是`[]byte`,第二个参数是string...
+
+append()可能会导致新的slice产生
 
     copy(dst, src []T) int
 
 拷贝就是将源切片的元素复制到目的切片，返回复制元素的个数。
 
-复制元素的个数不能超过src/dst的最小容量
+复制元素的个数是min(len(src), len(dst)),
 
+和append一样,copy也有一个特殊情况:  
+dst是`[]byte`,src却是一个string.
+
+    // 将string的byte拷贝到字符切片
     copy(dst []byte, src string) int
-
-拷贝还支持字符串
 
 ## map元素的删除
 
