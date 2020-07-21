@@ -1,9 +1,16 @@
 # 内置函数
 
 这些内置函数都是预先声明的。
+从调用方式上看,和普通函数没什么区别.
+有些内置函数,第一个参数是可接受类型,而不是值.
 
 这些内置函数并没有标准的Go类型，她们只能出现在调用表达式中。
-不能作为函数值。
+不能作为函数值。怎么理解?
+
+    // 这么用可以,因为是调用表达式
+    Close(xxx)
+    // 这么用不可以,因为内置函数不能作为函数值
+    a := Close
 
 ## 关闭发送信道
 
@@ -68,7 +75,7 @@ len和cap的参数不能包含接收操作，不能包含非常量的函数调�
       c3 = len([10]float64{c1})        // [10]float64{c1} contains no function calls
       c4 = len([10]float64{imag(2i)})  
                       // imag(2i) is a constant and no function call is issued
-      c5 = len([10]float64{imag(z)})   
+      c5 = len([10]float64{imag(z)})
                       // invalid: imag(z) is a (non-constant) function call
     )
     var z complex128
@@ -103,7 +110,7 @@ make，申请之后，还会初始化为零值
 
     delete(map,key)
 
-删除map中的map[key]，如果map中不存在指定的key或map为nil，则delete不执行任何操作。
+删除`map[key]`，如果map中不存在指定的key或map为nil，则delete不执行任何操作。
 
 ## 复数
 
