@@ -229,4 +229,8 @@ B中recover的返回值是interface{},这个返回值就是panic的调用参数�
 
 ## 自举 bootstrapping
 
-不关心
+为了完整性,有些内置函数很有用,但并不一定保证不会被丢弃.
+
+print/println,这两个函数在自举时用到了,没有返回值.
+
+如果我们要打印,还是使用fmt库好.
