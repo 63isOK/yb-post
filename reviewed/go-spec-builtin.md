@@ -169,8 +169,8 @@ panic()/recover() 用于协助报告和处理运行时异常/程序自定义错�
     func recover() interface{}
 
 在函数f中，显示调用panic或运行时异常，都会导致函数f结束执行，
-之后就是执行延时函数。然后报告给上层调用者，依次走到协程的最顶层，
-之后程序结束，报告错误，这个过程被称为panicking。
+之后就是执行延时函数。然后报告给上层调用者(也会调用其中的defer函数)，
+依次走到协程的最顶层，之后程序结束，报告错误，这个过程被称为panicking。
 
     panic(42)
     panic("unreachable")
@@ -178,11 +178,17 @@ panic()/recover() 用于协助报告和处理运行时异常/程序自定义错�
 
 recover函数允许程序接管协程的panicking行为。
 
-A函数有个延时函数B，A出现异常，B调用了recover来接管panicking行为。
-B中recover的返回值是interface{},这个返回值会传给panic的调用者A。
-如果返回值是正常的(没有新建一个panic)，那panicking序列会停止。
-此时从A到异常出现之间产生的状态都会被丢弃，然后重新执行。
+A函数有个延时函数B(B里调用了recover函数)，执行A函数的协程中出现异常，
+只要执行走到了B函数,B会调用recover来接管panicking行为。
+B函数的返回值会以值得方式传递给调用panic的调用者.
+如果B是正常返回,没有出现新的panic,则panicking序列会停止.
+B中recover的返回值是interface{},这个返回值就是panic的调用参数。
+如果recover返回值是正常的(没有新建一个panic)，那panicking序列会停止。
+此时从异常出现到A的剩下部分产生的状态都会被丢弃，
+说白了就是recover之后,调用完B之前的derfer函数,这是正常执行。
 延时函数B后面要执行的其他延时函数会执行，之后返回A的调用者。
+
+所以所有一截是丢弃掉了的,就是异常到A的剩下代码段.
 
 以下几种情况，recover的返回值是nil：
 
