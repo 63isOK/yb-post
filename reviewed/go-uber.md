@@ -1,5 +1,8 @@
 # Uber Go Style Guide
 
+原文[url](https://github.com/uber-go/guide/blob/master/style.md),
+中文翻译[url](https://github.com/xxjwxc/uber_go_guide_cn)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -49,7 +52,7 @@
 
 ## Introduction
 
-风格就是我们带常用的惯例。样式我们不需要操心，gofmt会处理。
+风格就是我们常说的编码规范。源码的格式化我们不需要操心，gofmt会处理。
 
 本文档通过描述"做什么"和"不做什么"来管理写代码时的复杂度。
 这些规则存在的目的是让代码易于管理。
@@ -58,8 +61,8 @@
 [Go常见错误指导](https://github.com/golang/go/wiki/CodeReviewComments)
 
 所有的代码在运行golint和go vet时，不应该报错。
-
-所以推荐使用goimports/golint/go vet来检查错误
+所以推荐使用goimports/golint/go vet来检查错误,
+而ide基本上都为我们调用了这些检查.
 
 ## Guidelines
 
@@ -128,7 +131,7 @@
     i = s1Ptr
     i = s2Ptr
 
-    // The following doesn't compile, since s2Val is a value, 
+    // The following doesn't compile, since s2Val is a value,
     // and there is no value receiver for f.
     //   i = s2Val
 
@@ -1156,7 +1159,7 @@ nil slice是有效的。
 
 nil的slice有以下意思：
 
-1. 显示返回一个0长度的slice，使用nil代替
+第一,显示返回一个0长度的slice，使用nil代替
 
     // bad
     if x == "" {
@@ -1168,7 +1171,7 @@ nil的slice有以下意思：
       return nil
     }
 
-2. 检查一个slice是否空，使用 len(s) == 0, 不要检查nil
+第二, 检查一个slice是否空，使用 len(s) == 0, 不要检查nil
 
     // bad
     func isEmpty(s []string) bool {
@@ -1180,7 +1183,7 @@ nil的slice有以下意思：
       return len(s) == 0
     }
 
-3. 未初始化(make)的slice(也就是零值 slice)是可用的
+第三, 未初始化(make)的slice(也就是零值 slice)是可用的
 
 bad：
 
