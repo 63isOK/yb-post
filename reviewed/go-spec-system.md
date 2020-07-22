@@ -2,8 +2,7 @@
 
 ## unsafe包
 
-一个内置包，提供了一个些低级别编程工具，包括违反类型系统的操作。
-
+一个内置包，提供了一个些低级别操作，特别是对易变类型系统。
 使用unsafe的包，需要手动审核类型安全，也可能会缺少可移植性。
 
     package unsafe
@@ -16,8 +15,7 @@
     func Offsetof(selector ArbitraryType) uintptr
     func Sizeof(variable ArbitraryType) uintptr
 
-Pointer是一个指针，但\*Pointer不一定是ok的
-
+Pointer是一个指针，但\*Pointer不一定是ok的,
 Pointer和uintptr是可以相互转化的。
 
     var f float64
@@ -28,11 +26,14 @@ Pointer和uintptr是可以相互转化的。
 
     var p ptr = nil
 
-Alignof/Sizeof 是取对齐边界和size
+Alignof/Sizeof 是取对齐边界和size,
+Offsetof是用于支持指针的算术运算的.
 
-Offsetof是用于支持指针的算术运算的
+unsafe定义的Pointer更多的跟具体os相关,只有非常底层编程才会用到.
 
-## size和字节对其
+## size和字节对齐
+
+数值类型的对齐约定:
 
     type                                 size in bytes
 
