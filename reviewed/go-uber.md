@@ -8,21 +8,29 @@
 - [Introduction](#introduction)
 - [Guidelines](#guidelines)
   - [Pointers to Interfaces](#pointers-to-interfaces)
+  - [Verify Interface Compliance](#verify-interface-compliance)
   - [Receivers and Interfaces](#receivers-and-interfaces)
   - [Zero-value Mutexes are Valid](#zero-value-mutexes-are-valid)
   - [Copy Slices and Maps at Boundaries](#copy-slices-and-maps-at-boundaries)
   - [Defer to Clean Up](#defer-to-clean-up)
   - [Channel Size is One or None](#channel-size-is-one-or-none)
   - [Start Enums at One](#start-enums-at-one)
+  - [Use `"time"` to handle time](#use-time-to-handle-time)
   - [Error Types](#error-types)
   - [Error Wrapping](#error-wrapping)
   - [Handle Type Assertion Failures](#handle-type-assertion-failures)
   - [Don't Panic](#dont-panic)
   - [Use go.uber.org/atomic](#use-gouberorgatomic)
+  - [Avoid Mutable Globals](#avoid-mutable-globals)
+  - [Avoid Embedding Types in Public Structs](#avoid-embedding-types-in-public-structs)
+  - [Avoid Using Built-In Names](#avoid-using-built-in-names)
+  - [Avoid `init()`](#avoid-init)
 - [Performance](#performance)
   - [Prefer strconv over fmt](#prefer-strconv-over-fmt)
   - [Avoid string-to-byte conversion](#avoid-string-to-byte-conversion)
-  - [Prefer Specifying Map Capacity Hints](#prefer-specifying-map-capacity-hints)
+  - [Prefer Specifying Container Capacity](#prefer-specifying-container-capacity)
+    - [Specifying Map Capacity Hints](#specifying-map-capacity-hints)
+    - [Specifying Slice Capacity](#specifying-slice-capacity)
 - [Style](#style)
   - [Be Consistent](#be-consistent)
   - [Group Similar Declarations](#group-similar-declarations)
@@ -122,6 +130,46 @@
 - 使用接口变量时,`没必要使用接口指针变量`
 - 给接口变量赋值时,可以是对象值,也可以是对象指针
   - 如果要修改对象,那必须是将对象指针赋值给接口变量
+
+### Verify Interface Compliance
+
+检查接口的合理性,是在编译期做的,主要包括:
+
+- 实现指定接口的导出类型,会作为接口api的一部分进行检查
+- 实现同一接口的类型(不管是导出还是非导出),都属于实现类型的集合
+- 任何违反接口合理性检查的其他场景,都会终止编译,并通知用户
+
+最后这条才是重点,大意是错误使用接口会在编译报错.
+所以可以利用这个特点,可以将部分问题在编译期暴露出来.
+
+    // 坏味道
+    // 如果Handler没有完全实现http.Handler,会在运行时报错
+    type Handler struct {
+      // ...
+    }
+    func (h *Handler) ServeHTTP(
+      w http.ResponseWriter,
+      r *http.Request,
+    ) {
+      ...
+    }
+
+    // 好味道
+    type Handler struct {
+      // ...
+    }
+
+    // 加上这个,会出发编译期的检查
+    // 这么做是保证提早发现问题(从运行时提早到编译期)
+    // 得到的好处很多,但花费很少
+    var _ http.Handler = (*Handler)(nil)
+
+    func (h *Handler) ServeHTTP(
+      w http.ResponseWriter,
+      r *http.Request,
+    ) {
+      // ...
+    }
 
 ### Receivers and Interfaces
 
