@@ -308,17 +308,19 @@ sync.Mutex sync.RWMutex的零值是有意义的,所以永远不要用互斥量�
 
 ### Copy Slices and Maps at Boundaries
 
+map/slice的边界拷贝:为了数据安全.
+
 slice和map都是引用类型，她们都包含一个指针，指向实际数据，
-所以拷贝数据时需要警惕。
+所以拷贝数据时需要警惕,特别是边界。
 
 #### Receiving Slices and Maps
 
 如果将slice/map以参数的形式接收过来，自己存储的时候如果是存引用(不是值)，
 那么后续操作中是可以修改这个slice/map的。
 
-分析：slice/map作为参数传递，本省就是引用类型，如果我们有个变量存储了这个引用，
+分析：slice/map作为参数传递，本身就是引用类型，如果我们有个变量存储了这个引用，
 那么，在后续的操作中(可能不在这个函数中)，只要修改了这个变量，
-就会修改读应的slice/map。如果不想后续操作会改变slice/map，可以在函数做拷贝
+就会修改对应的slice/map。如果不想后续操作会改变slice/map，可以在函数做拷贝
 
 bad:
 
@@ -345,6 +347,10 @@ good:
     // We can now modify trips[0] without affecting d1.trips.
     trips[0] = ...
     // 新建变量来存储
+
+总结:以slice/map为参数,而且这个引用还保存了,
+就需要知道引用的这个值是可能被改变的;
+如果想存引用但不想被改动,就新建一个slice/map.
 
 #### Returning Slices and Maps
 
@@ -391,6 +397,14 @@ good:
     // Snapshot is now a copy.
     snapshot := stats.Snapshot()
     // 修改的是一个拷贝，不影响原始数据
+
+为了保护数据,可以在返回之前,新建一个slice/map.
+
+map/slice的边界拷贝:为了数据安全.
+
+因为map/slice是引用类型,
+所以进出函数不做限制都有可能发生值改变的情况,
+所以在函数边界添加拷贝,这样就可以起到保护数据的作用.
 
 ### Defer to Clean Up
 
