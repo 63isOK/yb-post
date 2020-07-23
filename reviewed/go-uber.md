@@ -494,6 +494,55 @@ good：
 
 当然并不是绝对的,有些我们已经习惯从0开始的,还是从0开始比较好.
 
+### Use `"time"` to handle time
+
+首先我们的观点中对时间有很多误解,
+一天是不是正好24小时整,一年是不是固定的365天.
+
+所以正确的姿势是使用time包来处理时间问题.
+
+#### 用time.Time来表示时刻
+
+时刻的比较使用
+
+    func isActive(now, start, stop time.Time) bool {
+      return (start.Before(now) || start.Equal(now)) && now.Before(stop)
+    }
+
+#### 用time.Duration表示时间段
+
+能用time包提供的,就不要自己实现
+
+    func poll(delay time.Duration) {
+      for {
+        // ...
+        time.Sleep(delay)
+      }
+    }
+
+    poll(10*time.Second)
+
+应该基于意图来选择合适的处理,
+加一天,就不要使用加24小时.
+
+#### 使用time.Time/time.Duration来和外部系统交互
+
+- flag包,通过time.ParseDuration支持time.Duration
+- encoding/json包,通过UnmarshlJSON支持time.Time
+- database/sql包, 支持DATATIME/TIMESTAMP转time.Time
+- gopkg.in/yaml.v2包,也支持time.Time
+
+所以说和外部系统交互时,time包也足够强大,
+
+万一time搞不定,就将time.Duration转成int/float64.
+并在字段名上体现单位.
+将time.Time转成string.
+
+    // {"intervalMillis": 2000}
+    type Config struct {
+      IntervalMillis int `json:"intervalMillis"`
+    }
+
 ### Error Types
 
 一般使用error的方式有以下几种：
