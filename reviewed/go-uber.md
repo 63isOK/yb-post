@@ -492,6 +492,8 @@ good：
 
     // Add=1, Subtract=2, Multiply=3
 
+当然并不是绝对的,有些我们已经习惯从0开始的,还是从0开始比较好.
+
 ### Error Types
 
 一般使用error的方式有以下几种：
