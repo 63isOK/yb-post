@@ -1267,7 +1267,8 @@ good:
 
 ### Top-level Variable Declarations
 
-对于顶层变量声明，使用var关键字。不要指定类型，除非预期类型和表达式类型不一致
+对于顶层变量声明，使用var关键字。不要指定类型，除非预期类型和表达式类型不一致.
+这种适合用右值来初始化变量的情况.
 
 bad：
 
@@ -1293,6 +1294,11 @@ good:
 
     var _e error = F()
     // F returns an object of type myError but we want error.
+
+用右值来初始化顶层变量,有两种情况,变量和右值的类型是一致的,
+这种情况变量无需显式指定类型;第二种情况,变量和右值类型不一致,
+这种情况下,变量是接口变量,右值的结果是具体类型的值,
+此时是需要显示指明变量类型的.
 
 ### Prefix Unexported Globals with _
 
