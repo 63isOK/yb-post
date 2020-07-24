@@ -1562,7 +1562,8 @@ Go支持原始字符串字面量，这样可以避免转义。
 
 ### Initializing Struct References
 
-初始化结构体引用，使用 &T{} 而不是 new(T)
+初始化结构体引用，使用 &T{} 而不是 new(T),
+这主要是为了保持统一的风格.
 
 bad:
 
@@ -1585,6 +1586,9 @@ good：
 使用make创建一个空的map，然后编程来添加元素。
 这样的好处是初始化和声明的独立的。
 
+因为声明和字面量初始化的写法很接近,索性使用make来初始化,
+更加容易分辨初始化和声明.
+
 bad：
 
     var (
@@ -1605,8 +1609,9 @@ good：
     )
     // 声明和初始化在视觉上就很独立,易区分
 
-初始化时尽可能提供容量信息。
+初始化时尽可能提供容量信息。前面的指导原则中也提到了.
 
+例外:如果map的元素列表是固定的,
 使用map字面量来初始化一个map，是优先选择的。
 
 bad：
@@ -1631,7 +1636,7 @@ good:
 
 ### Format Strings outside Printf
 
-使用Print-家族函数时，如果格式化字符串是单独声明，那最好声明成const 无类型
+使用Print-家族函数时，如果格式字符串是单独声明，那最好声明成const.
 
     // bad
     msg := "unexpected values %v, %v\n"
@@ -1645,9 +1650,9 @@ go vet 静态分析也会检测这点
 
 ### Naming Printf-style Functions
 
-基于go vet对printf家族的检查，使用go vet -printfuncs=wrapf,statusf
+声明Printf风格的函数,用go vet 并指明格式,让go vet来帮忙进行检查.
 
-具体后面可以继续跟进
+基于go vet对printf家族的检查，使用go vet -printfuncs=wrapf,statusf
 
 ## Patterns
 
