@@ -953,7 +953,7 @@ good:
 
 ### Prefer Specifying Map Capacity Hints
 
-在用make初始化map时，尽可能提供容量，用处是检查重新分配的次数
+在用make初始化map时，尽可能提供容量，用处是减少重新分配的次数
 
 bad：
 
@@ -974,6 +974,14 @@ good:
         m[f.Name()] = f
     }
     // 更少的申请操作，意味更高的性能
+
+对于map,尽可能在初始化时(make)提供容量大小.
+和slice不一样,map的容量是一个建议值,实际分配时可能不是指定值,
+因为map中分配是不是抢占式的,slice就是抢占式的.
+
+对于slice,也是需要尽可能指定容量大小的.
+append不一定能触发slice的扩容,因为未slice分配时,
+可能会超过指定的容量大小.
 
 ## Style
 
