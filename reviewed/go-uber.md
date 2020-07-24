@@ -1,25 +1,36 @@
 # Uber Go Style Guide
 
+原文[url](https://github.com/uber-go/guide/blob/master/style.md),
+中文翻译[url](https://github.com/xxjwxc/uber_go_guide_cn)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Guidelines](#guidelines)
   - [Pointers to Interfaces](#pointers-to-interfaces)
+  - [Verify Interface Compliance](#verify-interface-compliance)
   - [Receivers and Interfaces](#receivers-and-interfaces)
   - [Zero-value Mutexes are Valid](#zero-value-mutexes-are-valid)
   - [Copy Slices and Maps at Boundaries](#copy-slices-and-maps-at-boundaries)
   - [Defer to Clean Up](#defer-to-clean-up)
   - [Channel Size is One or None](#channel-size-is-one-or-none)
   - [Start Enums at One](#start-enums-at-one)
+  - [Use `"time"` to handle time](#use-time-to-handle-time)
   - [Error Types](#error-types)
   - [Error Wrapping](#error-wrapping)
   - [Handle Type Assertion Failures](#handle-type-assertion-failures)
   - [Don't Panic](#dont-panic)
   - [Use go.uber.org/atomic](#use-gouberorgatomic)
+  - [Avoid Mutable Globals](#avoid-mutable-globals)
+  - [Avoid Embedding Types in Public Structs](#avoid-embedding-types-in-public-structs)
+  - [Avoid Using Built-In Names](#avoid-using-built-in-names)
+  - [Avoid `init()`](#avoid-init)
 - [Performance](#performance)
   - [Prefer strconv over fmt](#prefer-strconv-over-fmt)
   - [Avoid string-to-byte conversion](#avoid-string-to-byte-conversion)
-  - [Prefer Specifying Map Capacity Hints](#prefer-specifying-map-capacity-hints)
+  - [Prefer Specifying Container Capacity](#prefer-specifying-container-capacity)
+    - [Specifying Map Capacity Hints](#specifying-map-capacity-hints)
+    - [Specifying Slice Capacity](#specifying-slice-capacity)
 - [Style](#style)
   - [Be Consistent](#be-consistent)
   - [Group Similar Declarations](#group-similar-declarations)
@@ -49,7 +60,7 @@
 
 ## Introduction
 
-风格就是我们带常用的惯例。样式我们不需要操心，gofmt会处理。
+风格就是我们常说的编码规范。源码的格式化我们不需要操心，gofmt会处理。
 
 本文档通过描述"做什么"和"不做什么"来管理写代码时的复杂度。
 这些规则存在的目的是让代码易于管理。
@@ -58,25 +69,112 @@
 [Go常见错误指导](https://github.com/golang/go/wiki/CodeReviewComments)
 
 所有的代码在运行golint和go vet时，不应该报错。
-
-所以推荐使用goimports/golint/go vet来检查错误
+所以推荐使用goimports/golint/go vet来检查错误,
+而ide基本上都为我们调用了这些检查.
 
 ## Guidelines
 
 ### Pointers to Interfaces
 
-用于不要使用接口指针。每次传递接口都使用传值，里面的基础数据仍然可以是指针
+用于不要使用接口指针。每次传递接口都使用传值，
+因为里面的基础数据仍然可以是指针.
 
 一个接口有两个部分：
 
 1. 一个指针指向具体类型的信息，可以理解为类型
 2. 数据指针。如果数据是一个指针，就直接存，如果数据是一个值，会存指向值的指针。
 
-如果想通过接口方法来修改值，那接口变量就存指针。
+如果想通过接口方法来修改底层的值，那就需要使用指针. 什么指针?
+
+    // 手动修改例子来调试
+    type A interface {
+      add()
+      print()
+      modify(n int)
+    }
+
+    type B struct {
+      v int
+    }
+
+    func (b *B)add() {
+      b.v++
+    }
+
+    func (b B)print() {
+      fmt.Println(b.v)
+    }
+
+    func (b B)modify(n int) {
+      b.v += n
+      fmt.Println(b.v, n)
+    }
+
+    // main函数中执行
+    var i A = &B{1}
+    i.add()
+    i.modify(5)
+    i.print()
+
+对上面的例子,先说几点:
+
+- 如果B对象不是将指针赋给接口变量i,而是将B对象的值付给i
+  - 首先,赋值是没问题的,因为接口变量底层也是指针
+  - 其次,语法检测会报错,因为值接收者的方法集中没有add()方法
+  - 再者,将add改为值方法,此时会发现,add/modify无法改变B对象的值
+    - 因为是传值,所以改变是无法影响原有对象的
+- 如果B对象是将指针付给接口变量i,是可以通过方法来改变原有对象的值
+
+所以,这个部分讲的是:
+
+- 使用接口变量时,`没必要使用接口指针变量`
+- 给接口变量赋值时,可以是对象值,也可以是对象指针
+  - 如果要修改对象,那必须是将对象指针赋值给接口变量
+
+### Verify Interface Compliance
+
+检查接口的合理性,是在编译期做的,主要包括:
+
+- 实现指定接口的导出类型,会作为接口api的一部分进行检查
+- 实现同一接口的类型(不管是导出还是非导出),都属于实现类型的集合
+- 任何违反接口合理性检查的其他场景,都会终止编译,并通知用户
+
+最后这条才是重点,大意是错误使用接口会在编译报错.
+所以可以利用这个特点,可以将部分问题在编译期暴露出来.
+
+    // 坏味道
+    // 如果Handler没有完全实现http.Handler,会在运行时报错
+    type Handler struct {
+      // ...
+    }
+    func (h *Handler) ServeHTTP(
+      w http.ResponseWriter,
+      r *http.Request,
+    ) {
+      ...
+    }
+
+    // 好味道
+    type Handler struct {
+      // ...
+    }
+
+    // 加上这个,会触发编译期的检查
+    // 这么做是保证提早发现问题(从运行时提早到编译期)
+    // 得到的好处很多,但花费很少
+    var _ http.Handler = (*Handler)(nil)
+
+    func (h *Handler) ServeHTTP(
+      w http.ResponseWriter,
+      r *http.Request,
+    ) {
+      // ...
+    }
 
 ### Receivers and Interfaces
 
-指针也能调用值的方法集
+指针也能调用值的方法集,更具体的是:
+值接收者的方法集是指针接收者方法集的子集,反之不是.
 
     type S struct {
       data string
@@ -128,7 +226,7 @@
     i = s1Ptr
     i = s2Ptr
 
-    // The following doesn't compile, since s2Val is a value, 
+    // The following doesn't compile, since s2Val is a value,
     // and there is no value receiver for f.
     //   i = s2Val
 
@@ -136,17 +234,32 @@
 一个值变量，只能使用值接收者的方法集;
 一个指针变量，能使用值接收者的方法集 + 指针接收者的方法集。
 
+而接口,底层就是指针,某个类型实现了接口,说的是这个类型的方法集合接口匹配,
+更进一步,这个类型的值方法集或指针方法集合接口的方法集匹配.
+有趣的事情就在这里出现了:
+
+- 值方法集合满足接口(和接口的方法集匹配)
+  - 不管给接口变量赋值的是值变量还是指针变量,都ok
+  - 因为不管值变量和指针变量,他们的方法集都包含值方法集
+- 指针方法集才满足接口
+  - 这是只能将指针变量赋值给接口变量
+  - 将值变量赋值给接口变量会报错(因为不满足接口)
+  - 为什么是编译期报错? 上一节的接口合理性检查提到了检测规则
+
+再看看为啥 i=s2Val会报错,因为s2的值方法集不满足接口定义,仅此而已.
+
 ### Zero-value Mutexes are Valid
 
-sync.Mutex sync.RWMutex的零值是有效的,所以永远不要用互斥量指针(因为没必要)。
+sync.Mutex sync.RWMutex的零值是有意义的,所以永远不要用互斥量指针(因为没必要)。
 
 如果有一个结构体指针，那互斥量也要是非指针字段。
+理由和上条建议一样,互斥量的零值是有意义的,没必要弄指针.
 
 互斥量是来保护某些字段的，暴露到包外是不明智的选择(),
 结构体中的互斥量，如果互斥量是嵌入到结构体，那结构体不要暴露;
 如果互斥量以字段的形式出现在结构体中，那只要互斥量字段不要暴露就行。
 
-    // 对于不导入类型(私有类型)
+    // 对于不导出类型(私有类型)
     // 使用嵌入和字段都可以
     type smap struct {
       sync.Mutex // only for unexported types
@@ -168,7 +281,7 @@ sync.Mutex sync.RWMutex的零值是有效的,所以永远不要用互斥量指�
     }
 
     // 对于导出类型
-    // 互斥量只能作为非导出字段
+    // 互斥量只能作为非导出字段,这样是为了安全
     type SMap struct {
       mu sync.Mutex
 
@@ -188,19 +301,26 @@ sync.Mutex sync.RWMutex的零值是有效的,所以永远不要用互斥量指�
       return m.data[k]
     }
 
+总的来说:
+
+- 互斥量的零值是有意义的,避免使用互斥量指针
+- 不要将互斥量的操作暴露到外面,这是为了安全着想
+
 ### Copy Slices and Maps at Boundaries
 
+map/slice的边界拷贝:为了数据安全.
+
 slice和map都是引用类型，她们都包含一个指针，指向实际数据，
-所以拷贝数据时需要警惕。
+所以拷贝数据时需要警惕,特别是边界。
 
 #### Receiving Slices and Maps
 
 如果将slice/map以参数的形式接收过来，自己存储的时候如果是存引用(不是值)，
 那么后续操作中是可以修改这个slice/map的。
 
-分析：slice/map作为参数传递，本省就是引用类型，如果我们有个变量存储了这个引用，
+分析：slice/map作为参数传递，本身就是引用类型，如果我们有个变量存储了这个引用，
 那么，在后续的操作中(可能不在这个函数中)，只要修改了这个变量，
-就会修改读应的slice/map。如果不想后续操作会改变slice/map，可以在函数做拷贝
+就会修改对应的slice/map。如果不想后续操作会改变slice/map，可以在函数做拷贝
 
 bad:
 
@@ -227,6 +347,10 @@ good:
     // We can now modify trips[0] without affecting d1.trips.
     trips[0] = ...
     // 新建变量来存储
+
+总结:以slice/map为参数,而且这个引用还保存了,
+就需要知道引用的这个值是可能被改变的;
+如果想存引用但不想被改动,就新建一个slice/map.
 
 #### Returning Slices and Maps
 
@@ -274,6 +398,14 @@ good:
     snapshot := stats.Snapshot()
     // 修改的是一个拷贝，不影响原始数据
 
+为了保护数据,可以在返回之前,新建一个slice/map.
+
+map/slice的边界拷贝:为了数据安全.
+
+因为map/slice是引用类型,
+所以进出函数不做限制都有可能发生值改变的情况,
+所以在函数边界添加拷贝,这样就可以起到保护数据的作用.
+
 ### Defer to Clean Up
 
 延时函数，成对的操作(特别是资源的申请和释放)，特别适合使用defer
@@ -306,9 +438,10 @@ good：
     // more readable
     // 使用延时函数，写一处就行
     // 由语言机制去简化操作
+    // 可读性大大提高
 
-defer是很方便，但不是万灵药，defer也有消耗，在纳秒级。
-如果程序的消耗在纳秒级，就无需使用defer。
+defer是很方便，但不是万灵药，defer也有消耗，非常小,纳秒级。
+只有函数的消耗在纳秒级，才无需使用defer(应该使用其他方式)。
 就算看在defer的可读性上，也足够选择使用defer了。
 当方法是一个大方法，且访问内存更加复杂的，就更应该使用defer。
 
@@ -316,7 +449,7 @@ defer是很方便，但不是万灵药，defer也有消耗，在纳秒级。
 
 在实际使用中，channel的缓冲大小要么是1,要么是无缓冲的(无缓冲，表示缓冲大小为0)。
 其他任何大小都必须严格审查。
-大小具体如何决定，取决于在负载下，如何决定已写满并阻止继续写，以及何时发生这种事。
+大小具体如何决定，取决于在高负载或阻塞写下的写入，以及何时发生这种事。
 
 bad:
 
@@ -358,6 +491,57 @@ good：
     )
 
     // Add=1, Subtract=2, Multiply=3
+
+当然并不是绝对的,有些我们已经习惯从0开始的,还是从0开始比较好.
+
+### Use `"time"` to handle time
+
+首先我们的观点中对时间有很多误解,
+一天是不是正好24小时整,一年是不是固定的365天.
+
+所以正确的姿势是使用time包来处理时间问题.
+
+#### 用time.Time来表示时刻
+
+时刻的比较使用
+
+    func isActive(now, start, stop time.Time) bool {
+      return (start.Before(now) || start.Equal(now)) && now.Before(stop)
+    }
+
+#### 用time.Duration表示时间段
+
+能用time包提供的,就不要自己实现
+
+    func poll(delay time.Duration) {
+      for {
+        // ...
+        time.Sleep(delay)
+      }
+    }
+
+    poll(10*time.Second)
+
+应该基于意图来选择合适的处理,
+加一天,就不要使用加24小时.
+
+#### 使用time.Time/time.Duration来和外部系统交互
+
+- flag包,通过time.ParseDuration支持time.Duration
+- encoding/json包,通过UnmarshlJSON支持time.Time
+- database/sql包, 支持DATATIME/TIMESTAMP转time.Time
+- gopkg.in/yaml.v2包,也支持time.Time
+
+所以说和外部系统交互时,time包也足够强大,
+
+万一time搞不定,就将time.Duration转成int/float64.
+并在字段名上体现单位.
+将time.Time转成string.
+
+    // {"intervalMillis": 2000}
+    type Config struct {
+      IntervalMillis int `json:"intervalMillis"`
+    }
 
 ### Error Types
 
@@ -419,7 +603,8 @@ good：
     }
     // 将错误信息提取出来，一般在重构时会消除这个坏味道
 
-调用者需要检测并处理错误，如果不仅仅局限于静态字符串，那最好使用自定义错误类型。
+调用者需要检测并处理错误，如果不仅仅局限于静态字符串，
+那最好使用自定义错误类型。
 
 bad：
 
@@ -461,7 +646,8 @@ good:
       }
     }
 
-如果返回自定义错误类型的函数被导出了，那这个自定义错误类型就成了公共api的一部分。
+如果返回自定义错误类型的函数被导出了，
+那这个自定义错误类型就成了公共api的一部分。
 此时最好也暴露一个和错误类型匹配的检测函数。
 
     // package foo
@@ -495,14 +681,16 @@ good:
 
 ### Error Wrapping
 
-调用失败时，现在主要有3种主流方式来传递错误，可选的。
+调用失败时，现在主要有3种主流方式来传递错误。
 
 1. 直接返回原始错误类型, 适合没有附加上下文，且想保持原始错误类型的场景
 2. 有上下文，是用github.com/pkg/errors来封装，可以附加更多上下文
 3. 使用fmt.Errof,适合调用者不关心错误的场景(不检测也不处理)
 
-推荐使用的还是添加上下文，添加了没坏处，万一用到了上下文中的信息，不就赚到了吗，
+推荐使用的还是添加上下文，添加了没坏处，
+万一用到了上下文中的信息，不就赚到了吗，
 特别是扩展时，也方便。
+这意味着多多使用pkg/errors.
 
 当返回错误时，附加上下文，尽量不要附加一些"失败于:"类似的短语，目的是保持简洁。
 
@@ -526,7 +714,8 @@ good:
     // 错误传递之后，就是下面的语句了
     // x: y: new store: the error
 
-当然，如果错误是发到另一个系统，错误信息最好是简洁的(前缀有个err或failed)
+当然，如果错误是发到另一个系统，
+错误信息最好是简洁的(前缀有个err或failed)
 
 ### Handle Type Assertion Failures
 
@@ -548,7 +737,7 @@ good：
 
 产品级的代码，在运行时要避免运行时异常。
 
-运行时异常，是主要的源码级级联故障。
+运行时异常，是级级联故障的主要源头。
 如果错误发生了，函数必须返回一个错误以允许调用者来决定如何处理
 
 bad：
@@ -661,6 +850,57 @@ good:
 
 具体遇到了再详细了解。
 
+### Avoid Mutable Globals
+
+避免使用全局变量,作为代替,应该使用依赖注入.
+
+依赖注入是将依赖项的构造丢给第三方去做,依赖作为私有成员而存在.
+正好也可以将有关系的元素放在一起.
+
+### Avoid Embedding Types in Public Structs
+
+避免在公共结构中嵌入类型.
+
+嵌入类型缺少了实现细节/抑制了类型演化/带来了文档的模糊.
+
+如果有个公共类型A,用于实现了很多类型,需要避免将A作为嵌入类型写到具体类型,
+而是应该作为一个有名字的字段,将A的所有方法都实现用这个字段实现一下(这个叫写代理方法).
+
+需要用到嵌入类型的场景非常少.她的出现只是减少了写代理方法的部分.
+
+嵌入接口类型比嵌入结构体类型会让开发更加灵活,但仍缺少实现细节.
+
+不管是嵌入结构体还是嵌入接口类型,都缺乏类型的演进,
+下面几种情况都会是破坏性变更:
+
+- 嵌入接口新增方法
+- 嵌入结构体移除方法
+- 移除嵌入类型
+- 替换嵌入类型
+
+写代理方法虽然无趣,但有实现细节,提供了更多的变更机会,文档也更加清晰.
+
+### Avoid Using Built-In Names
+
+不要使用内置名称.
+
+### Avoid `init()`
+
+尽量不要使用init().如果非用不可,可先尝试:
+
+- 确定程序的环境和调用
+- 避免依赖有顺序或有副作用的其他init()
+- 避免访问或管理全局变量或环境状态
+- 避免i/o,不管是文件/网络/系统调用
+
+如果上面几点还不能满足,就放到main()中.
+
+下面几种情况,非常适合使用init():
+
+- 不能单赋值语句表示的复杂表达式
+- 插件钩子,eg:database/sql的变种,编码类型的注册等
+- 预计算的优化,eg:云函数
+
 ## Performance
 
 这些只适用于热路径的优化。
@@ -713,7 +953,7 @@ good:
 
 ### Prefer Specifying Map Capacity Hints
 
-在用make初始化map时，尽可能提供容量，用处是检查重新分配的次数
+在用make初始化map时，尽可能提供容量，用处是减少重新分配的次数
 
 bad：
 
@@ -735,15 +975,27 @@ good:
     }
     // 更少的申请操作，意味更高的性能
 
+对于map,尽可能在初始化时(make)提供容量大小.
+和slice不一样,map的容量是一个建议值,实际分配时可能不是指定值,
+因为map中分配是不是抢占式的,slice就是抢占式的.
+
+对于slice,也是需要尽可能指定容量大小的.
+append不一定能触发slice的扩容,因为未slice分配时,
+可能会超过指定的容量大小.
+
 ## Style
 
 ### Be Consistent
 
 风格要保持统一，好处多多。
 
+下面提到的规则,是客观上的.有些情况是要看主观上/场景/上下文的.
+
 ### Group Similar Declarations
 
-组声明方式保持一致
+组声明方式保持一致.
+
+类似的声明可以放在一个组.
 
 bad：
 
@@ -757,7 +1009,7 @@ good:
       "b"
     )
 
-变量/常量/类型声明都是类似的：
+变量/常量/类型声明都可以分组：
 
 bad：
 
@@ -787,7 +1039,7 @@ good:
       Volume float64
     )
 
-同组的放一起，不同组不要放一起：
+有相关性的放在一组,不相关的尽量不要放在一组.
 
 bad：
 
@@ -812,7 +1064,7 @@ good:
 
     const ENV_VAR = "MY_ENV"
 
-组也可以用在函数内部：
+组是没有使用地方限制的,组也可以用在函数内部：
 
 bad：
 
@@ -838,7 +1090,8 @@ good:
 
 ### Import Group Ordering
 
-导入的组应该分两个，标准包，非标准包
+导入的组应该分两个，标准包，非标准包,
+这块可以使用goimports来处理.
 
 bad:
 
@@ -864,10 +1117,10 @@ good:
 遵循以下规则：
 
 - 全小写，无下划线
-- 大部分导入情况下，不需要起别名的名字
+- 大部分导入情况下，不需要起别名的名字,不要太通用
 - 简短 + 简洁
 - 不要复数。eg：使用net/url,而不是net/urls
-- 不要 common/util/shared/lib, 这些名字不好，且包含的信息不够
+- 不要 common/util/shared/lib, 这些名字太通用且包含的信息不够
 
 ### Function Names
 
@@ -875,9 +1128,11 @@ Go的惯例是使用 MixedCaps，而不是下划线加小写。
 例外：测试函数包含下划线，表示测试一组相关的用例。
 eg：TestMyFunction_WhatIsBeingTested
 
+除测试函数外,其他函数名都应该是大小写组合.
+
 ### Import Aliasing
 
-如果包的导入路径中最后元素和包名不一致，要使用导入别名
+如果包的导入路径中最后元素和包名不一致，就必须要使用导入别名
 
     import (
       "net/http"
@@ -911,14 +1166,14 @@ good:
 
 ### Function Grouping and Ordering
 
-- 函数应该按调用顺序排序
-- 一个文件中，应该按接收者来分组
+- 函数应该按大致的调用顺序排序
+- 一个文件中的函数，应该按接收者来分组
 
 暴露的函数应该在源文件中先出现，当然要在struct/const/var定义之后。
 
-类似newXXX()/NewXXX()的应该出现在类型后面，方法前面。
+类似newXXX()/NewXXX()的构造函数应该出现在类型后面，方法前面。
 
-函数应该按接收者分组，纯工具函数应该放在源码文件的最后。
+函数按接收者分组后，剩下的纯工具函数应该放在源码文件的最后。
 
 bad:
 
@@ -955,7 +1210,8 @@ good：
 
 ### Reduce Nesting
 
-- 尽量减少嵌套层数
+尽量减少嵌套层数
+
 - 错误分支/指定条件分支先处理
 - 循环中的return/continue分支先处理
 
@@ -1011,7 +1267,8 @@ good:
 
 ### Top-level Variable Declarations
 
-对于顶层变量声明，使用var关键字。不要指定类型，除非预期类型和表达式类型不一致
+对于顶层变量声明，使用var关键字。不要指定类型，除非预期类型和表达式类型不一致.
+这种适合用右值来初始化变量的情况.
 
 bad：
 
@@ -1037,6 +1294,11 @@ good:
 
     var _e error = F()
     // F returns an object of type myError but we want error.
+
+用右值来初始化顶层变量,有两种情况,变量和右值的类型是一致的,
+这种情况变量无需显式指定类型;第二种情况,变量和右值类型不一致,
+这种情况下,变量是接口变量,右值的结果是具体类型的值,
+此时是需要显示指明变量类型的.
 
 ### Prefix Unexported Globals with _
 
@@ -1077,6 +1339,9 @@ good:
 ### Embedding in Structs
 
 结构体中的嵌入类型，应该在字段列表的最上面，且应该有一个空行和常规字段分开。
+这样可读性非常高.
+
+前面的指导规则中提到了:不要将公共类型嵌入具体类型,和这儿的场景不一样.
 
 bad：
 
@@ -1092,6 +1357,25 @@ good:
 
       version int
     }
+
+嵌套应该带来益处,eg:以语义合适的方式来新增或扩充功能.而且没有副作用.
+
+以下情况不应该嵌套:
+
+- 仅仅是为了装饰或方便
+- 让外部类型(被嵌入的类型)在构造和使用上增加了难度
+- 影响到外部类型的零值
+- 嵌入后,导致不相关的函数和字段导出了
+- 嵌入后,导致之前不导出的类型现在变成导出了
+- 影响到外部类型的拷贝语义
+- 要嵌入的类型内部有个不规范的嵌入类型
+- 暴露了外部类型的实现细节
+- 允许用户观察或控制要嵌入类型内部的细节
+- 在用户不知情的情况下,改变了内部函数的行为
+
+总之,是有意识地使用嵌入.有个测试方法:
+要嵌入的类型,她所有的方法和字段都是直接加到外部类型中的吗?
+如果答案不是yes,就不要使用嵌入.
 
 ### Use Field Names to Initialize Structs
 
@@ -1109,7 +1393,7 @@ good:
         Admin: true,
     }
 
-例外：table测试时，如果字段少于4个，字段名可省略
+例外：table测试时，如果字段少于3个，字段名可省略
 
     tests := []struct{
       op Operation
@@ -1126,7 +1410,7 @@ good:
     var s = "foo"     // bad
     s := "foo"        // good
 
-有些时候，使用var会更加清晰
+有些时候,意图是使用默认值时，使用var会更加清晰
 
 bad：
 
@@ -1152,11 +1436,11 @@ good：
 
 ### nil is a valid slice
 
-nil slice是有效的。
+nil slice是有效的,只是长度为0。
 
 nil的slice有以下意思：
 
-1. 显示返回一个0长度的slice，使用nil代替
+第一,显示返回一个0长度的slice，使用nil代替
 
     // bad
     if x == "" {
@@ -1168,7 +1452,7 @@ nil的slice有以下意思：
       return nil
     }
 
-2. 检查一个slice是否空，使用 len(s) == 0, 不要检查nil
+第二, 检查一个slice是否空，使用 len(s) == 0, 不要检查nil
 
     // bad
     func isEmpty(s []string) bool {
@@ -1180,7 +1464,8 @@ nil的slice有以下意思：
       return len(s) == 0
     }
 
-3. 未初始化(make)的slice(也就是零值 slice)是可用的
+第三, 未初始化(make)的slice(也就是零值 slice)是可用的,
+这点使用的尤其多.
 
 bad：
 
@@ -1207,9 +1492,12 @@ good:
       nums = append(nums, 2)
     }
 
+总之,nil切片是有效切片,不等于申请且长度为0的切片.
+在部分场景,这两种切片是不同的(eg:序列化).
+
 ### Reduce Scope of Variables
 
-尽量减少变量的作用域，当然不能引起冲突
+尽量减少变量的作用域，减少嵌套层数优先,其次减少变量作用域.
 
 bad：
 
@@ -1224,11 +1512,13 @@ good：
      return err
     }
 
-如果在函数外面还要使用这个结果，那就不要减少变量的作用域
+如果在函数外部还要使用返回值，那就不要减少变量的作用域
 
 ### Avoid Naked Parameters
 
-避免使用裸参数，裸参数会导致代码阅读性大大降低
+在函数调用中,避免使用裸参数，裸参数会导致代码阅读性大大降低,
+实在是需要使用裸参数,就用块注释将参数名包裹起来.
+这样可读性大大提高了.
 
     // func printInfo(name string, isLocal, done bool)
 
@@ -1272,7 +1562,8 @@ Go支持原始字符串字面量，这样可以避免转义。
 
 ### Initializing Struct References
 
-初始化结构体引用，使用 &T{} 而不是 new(T)
+初始化结构体引用，使用 &T{} 而不是 new(T),
+这主要是为了保持统一的风格.
 
 bad:
 
@@ -1295,6 +1586,9 @@ good：
 使用make创建一个空的map，然后编程来添加元素。
 这样的好处是初始化和声明的独立的。
 
+因为声明和字面量初始化的写法很接近,索性使用make来初始化,
+更加容易分辨初始化和声明.
+
 bad：
 
     var (
@@ -1315,8 +1609,9 @@ good：
     )
     // 声明和初始化在视觉上就很独立,易区分
 
-初始化时尽可能提供容量信息。
+初始化时尽可能提供容量信息。前面的指导原则中也提到了.
 
+例外:如果map的元素列表是固定的,
 使用map字面量来初始化一个map，是优先选择的。
 
 bad：
@@ -1341,7 +1636,7 @@ good:
 
 ### Format Strings outside Printf
 
-使用Print-家族函数时，如果格式化字符串是单独声明，那最好声明成const 无类型
+使用Print-家族函数时，如果格式字符串是单独声明，那最好声明成const.
 
     // bad
     msg := "unexpected values %v, %v\n"
@@ -1355,9 +1650,9 @@ go vet 静态分析也会检测这点
 
 ### Naming Printf-style Functions
 
-基于go vet对printf家族的检查，使用go vet -printfuncs=wrapf,statusf
+声明Printf风格的函数,用go vet 并指明格式,让go vet来帮忙进行检查.
 
-具体后面可以继续跟进
+基于go vet对printf家族的检查，使用go vet -printfuncs=wrapf,statusf
 
 ## Patterns
 
@@ -1429,9 +1724,15 @@ good:
       })
     }
 
+table测试,简单,可读性高,在上下文添加错误信息也更加容易,
+减少了重复的逻辑代码,添加新的测试用例非常方便.
+
 ### Functional Options
 
-函数的可选项，这是一种模式，特别适合在公共api中。
+函数可选项，这是一种模式，特别适合在公共api中,尤其是超过3个可选参数时。
+
+做法是声明一个不透明的option类型,这个option类型保存内部结构的一些信息.
+通过多个这种option类型,就可以保存所有可选的内部结构的信息.
 
 bad：坏坏的味道：
 
@@ -1510,3 +1811,9 @@ good: 优雅是何物：
       db.WithCaching(false),
       db.WithTimeout(newTimeout),
     )
+
+上面的额例子子是通过接口+函数来实现,也可以通过接口+方法来实现.
+推荐使用接口(不导出的方法集)+可选参数组成的结构体+每个可选参保存的函数.
+或者更加复杂的.
+
+总之是利用函数这个一等公民来实现函数可选参模式.

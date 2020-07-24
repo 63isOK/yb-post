@@ -15,8 +15,9 @@
 
 - 日志的第一行不要超过50个词
 - 单独写提交日志，git commit -av就是不错的
-- 日志中最好包含一个url，这个url指向项目的issue/stroy/card，这比issues号更好,
-如果是基于github issues，那还是用单号比较号
+- 日志中最好包含一个url
+  - 这个url指向项目的issue/stroy/card，这比issues号更好
+  - 如果是基于github issues，那还是用单号比较号
 - 日志中应该包含一个简短的用户故事，这样更容易被人理解
 
 ## 日志要表达的信息
