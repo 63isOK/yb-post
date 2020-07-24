@@ -1393,7 +1393,7 @@ good:
         Admin: true,
     }
 
-例外：table测试时，如果字段少于4个，字段名可省略
+例外：table测试时，如果字段少于3个，字段名可省略
 
     tests := []struct{
       op Operation
@@ -1410,7 +1410,7 @@ good:
     var s = "foo"     // bad
     s := "foo"        // good
 
-有些时候，使用var会更加清晰
+有些时候,意图是使用默认值时，使用var会更加清晰
 
 bad：
 
@@ -1436,7 +1436,7 @@ good：
 
 ### nil is a valid slice
 
-nil slice是有效的。
+nil slice是有效的,只是长度为0。
 
 nil的slice有以下意思：
 
@@ -1464,7 +1464,8 @@ nil的slice有以下意思：
       return len(s) == 0
     }
 
-第三, 未初始化(make)的slice(也就是零值 slice)是可用的
+第三, 未初始化(make)的slice(也就是零值 slice)是可用的,
+这点使用的尤其多.
 
 bad：
 
@@ -1490,6 +1491,9 @@ good:
     if add2 {
       nums = append(nums, 2)
     }
+
+总之,nil切片是有效切片,不等于申请且长度为0的切片.
+在部分场景,这两种切片是不同的(eg:序列化).
 
 ### Reduce Scope of Variables
 
