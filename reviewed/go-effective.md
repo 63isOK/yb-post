@@ -243,27 +243,27 @@ map中的删除，delete(key),即使key不存在，操作也是安全的，
 - fmt.Fprintf
 - fmt.Sprintf 会返回一个新的字符串，而非填充给定的缓冲
 
+下面是部分常用打印格式参数,更加详细的可以翻文档:
+
 - %v，用于打印通用格式，eg：非10进制会打印成10进制，数组、结构体、map都能打印
 - %+v，还会把结构体上每个字段名打出来
 - %#v，按go语言语法打印出来
-- %q，遇到string或[]byte时，可打印出带引号的字符串，遇到整数或rune时，
-打印带单引号的
+- %q，遇到string或`[]byte`时，可打印出带引号的字符串，遇到整数或rune时，打印带单引号的
 - %#q，会尽可能使用反引号
 - %x，用于字符串 字节数组和整数，打印出很长的16进制字符串
 - % x，中间带一个空格，打印出来的字节之间会插入空格
 - %T，打印值的类型
 
 自定义类型的默认格式，可通过String()string 方法来实现，
-只需要注意String()方法中调用Sprintf时，别把类型作为string加入到格式化中，
+只需要注意String()方法中调用Sprintf时，别触发另一个String()方法
+不然就是无限循环,特别是自定义类型就是string时，
 解决方法是直接将类型实参显示转换成string。eg：
 
-```go
     type MyString string
     func (m MyString)String()string{
         return fmt.Sprintf("MyString=%s", string(m))
         // return fmt.Sprintf("MyString=%s", m)  这种情况会导致无限递归
     }
-```
 
 func a(v ...interface{}){} // ...是告诉编译器 v是一个实参列表，
 省掉就是一个具体的接口对象了。
