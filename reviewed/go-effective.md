@@ -271,9 +271,8 @@ func a(v ...int) () {} // 表示实参列表是整形
 
 ## append()
 
-func append(slice []T, elements ...T) []T 内置的追加函数
+    func append(slice []T, elements ...T) []T 内置的追加函数
 
-```go
     // 适用于切片，因为底层数组有可能改变，所以写法一般是
     x := []int {1, 2, 3}
     y := []int {1, 2, 3}
@@ -281,7 +280,11 @@ func append(slice []T, elements ...T) []T 内置的追加函数
 
     // 切片追加切片
     x = append(x, y...) // 没有...会在编译时报类型错误
-```
+
+...的用法,在上面的例子中体现了两个:
+
+- 引用类型前面,表示可变参
+- 放在引用变量后面,表示遍历的元素
 
 ## 初始化
 
