@@ -187,7 +187,7 @@ ebnf:
     }
 
 - 嵌入field或方法,在struct是可以直接用的
-- 嵌入field和普通field基本一样,差别是无法使用s.filed名方式来调用嵌入filed
+- 嵌入field和普通field基本一样,差别是无法在复合字面量中使用s.filed名方式
 - 嵌入field,指针和非指针的区别:
   - type s struct { A, \*B }
   - s的方法集包含   A作为接收者的方法集 + B/\*B作为接收者的方法集
